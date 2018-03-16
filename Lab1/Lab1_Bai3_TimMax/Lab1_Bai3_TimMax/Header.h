@@ -39,8 +39,8 @@ int Tim_Max(Mang a, int length)
 {
 	int max = a[0];
 	for (size_t i = 1; i < length; i++)
-	if (a[i] > max)
-		max = a[i];
+		if (a[i] > max)
+			max = a[i];
 	return max;
 }
 
@@ -50,7 +50,7 @@ int Tim_CS_MAX(Mang a, int length)
 	int max = a[0], kq;
 	for (size_t i = 1; i < length; i++)
 	{
-		if (a[i]>max)
+		if (a[i] > max)
 		{
 			max = a[i];
 			kq = i;
@@ -71,7 +71,7 @@ bool CoChua_x(Mang a, int length, int x)
 //Tìm và trả về chỉ số của phần tử âm lớn nhất trong mảng
 int Tim_CS_Am_Max(Mang a, int length)
 {
-	int max = -99999, kq=-1;
+	int max = -99999, kq = -1;
 	for (size_t i = 0; i < length; i++)
 		if (a[i]<0 && a[i]>max)
 		{
@@ -86,7 +86,7 @@ int Tim_KC_MAX(Mang a, int length, int x)
 {
 	int max = abs(x - a[0]);
 	for (size_t i = 1; i < length; i++)
-		if (abs(x - a[i])>max)
+		if (abs(x - a[i]) > max)
 			max = abs(x - a[i]);
 	return max;
 }
@@ -97,8 +97,8 @@ bool KT_NguyenTo(int a)
 	if (a > 0)
 	{
 		for (size_t i = 2; i <= sqrt(a); i++)
-		if (a%i == 0)
-			return false;
+			if (a%i == 0)
+				return false;
 		return true;
 	}
 	return false;

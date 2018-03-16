@@ -39,8 +39,8 @@ void XuatMang(Mang a, int length)
 bool KT_KhongChua_Khong(Mang a, int length)
 {
 	for (size_t i = 0; i < length; i++)
-	if (a[i] == 0)
-		return false;
+		if (a[i] == 0)
+			return false;
 	return true;
 }
 
@@ -48,8 +48,8 @@ bool KT_KhongChua_Khong(Mang a, int length)
 bool KT_Tang(Mang a, int length)
 {
 	for (size_t i = 1; i < length; i++)
-	if (a[i] < a[i - 1])
-		return false;
+		if (a[i] < a[i - 1])
+			return false;
 	return true;
 }
 
@@ -57,8 +57,8 @@ bool KT_Tang(Mang a, int length)
 bool KT_3PhanTu_Trung(Mang a, int length)
 {
 	for (size_t i = 0; i < length - 2; i++)
-	if (a[i] == a[i + 1] && a[i + 1] == a[i + 2])
-		return true;
+		if (a[i] == a[i + 1] && a[i + 1] == a[i + 2])
+			return true;
 	return false;
 }
 
@@ -75,8 +75,8 @@ bool KT_Co2PhanTu(Mang a, int length)
 bool KT_ChiChua_TrongKhoang(Mang a, int length)
 {
 	for (size_t i = 0; i < length; i++)
-	if (a[i] >= length || a[i] < 0)
-		return false;
+		if (a[i] >= length || a[i] < 0)
+			return false;
 	return true;
 }
 
@@ -98,7 +98,7 @@ bool KT_Co0_thi_Co1(Mang a, int length)
 bool KT_HoanVi(Mang a, Mang b, int length)
 {
 	for (size_t i = 0; i < length; i++)
-	if (a[i] != b[length - i - 1])
-		return false;
+		if (a[i] != b[length - i - 1])
+			return false;
 	return true;
 }
