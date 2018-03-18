@@ -320,5 +320,6 @@ void Copy(LIST &dst, LIST src)
 	{
 		x = p->info;
 		InsertTail(dst, x);
+		p=p->pNext;
 	}
 }
