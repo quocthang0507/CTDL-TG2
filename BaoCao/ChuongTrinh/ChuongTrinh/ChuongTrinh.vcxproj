@@ -149,7 +149,8 @@
     <ClCompile Include="Program.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Header.h" />
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="Menu.h" />
   </ItemGroup>
   <ItemGroup>

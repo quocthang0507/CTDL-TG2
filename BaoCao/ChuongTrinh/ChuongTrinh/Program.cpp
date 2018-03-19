@@ -3,7 +3,8 @@
 
 using namespace std;
 
-#include "Header.h"
+#include "Common.h"
+#include "Graph.h"
 #include "Menu.h"
 
 void ChayChuongTrinh();
