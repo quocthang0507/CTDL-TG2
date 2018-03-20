@@ -1,5 +1,8 @@
 #include <iostream>
 #include <conio.h>
+#include <fstream>
+#include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -7,15 +10,7 @@ using namespace std;
 #include "Graph.h"
 #include "Menu.h"
 
-void ChayChuongTrinh();
-
 int main()
-{
-	ChayChuongTrinh();
-	return 1;
-}
-
-void ChayChuongTrinh()
 {
 	int soMenu = 8, menu;
 	do
@@ -23,4 +18,5 @@ void ChayChuongTrinh()
 		menu = ChonMenu(soMenu);
 		XuLyMenu(menu);
 	} while (menu > 0);
+	return 1;
 }
