@@ -87,6 +87,7 @@ int Read_File(char *filename, LIST &l)
 	return 1;
 }
 
+//Tìm và trả về chỉ số của phần tử x đầu tiên tìm được
 int Search_Node_x_First(LIST l, Data x)
 {
 	NODE *p = new NODE;
@@ -102,6 +103,7 @@ int Search_Node_x_First(LIST l, Data x)
 	return i;
 }
 
+//Tìm và trả về chỉ số của phần tử x ở cuối
 int Search_Node_x_End(LIST l, Data x)
 {
 	NODE *p = new NODE;
@@ -117,6 +119,7 @@ int Search_Node_x_End(LIST l, Data x)
 	return kq;
 }
 
+//Chèn thông tin x lên đầu danh sách
 void InsertHead(LIST &l, Data x)
 {
 	NODE *new_ele = GetNode(x);
@@ -137,6 +140,7 @@ void InsertHead(LIST &l, Data x)
 	}
 }
 
+//Loại bỏ nút đầu của danh sách
 void RemoveHead(LIST &l)
 {
 	NODE *p;
@@ -152,6 +156,7 @@ void RemoveHead(LIST &l)
 		l.pTail == NULL;
 }
 
+//Loại bỏ nút cuối của danh sách
 void RemoveTail(LIST &l)
 {
 	NODE *p, *q;
@@ -175,10 +180,11 @@ void RemoveTail(LIST &l)
 		l.pTail->pNext = NULL;
 }
 
+//Loại bỏ nút có dữ liệu là x mà tìm thấy đầu tiên
 int RemoveNode_First(LIST &l, Data x)
 {
-	NODE *p = l.pHead;
-	NODE *q = NULL;
+	NODE *p = l.pHead; //Xác định nút cần xóa
+	NODE *q = NULL; //Xác định nút trước nút cần xóa
 	while (p != NULL)
 	{
 		if (p->info == x)
@@ -186,15 +192,15 @@ int RemoveNode_First(LIST &l, Data x)
 		q = p;
 		p = p->pNext;
 	}
-	if (p == NULL)
+	if (p == NULL) //Danh sách rỗng
 		return 0;
-	if (q != NULL)
+	if (q != NULL) //Tồn tại nút q nằm trước nút p
 	{
 		if (p == l.pTail)
 			l.pTail = q;
-		q->pNext = p->pNext;//q->pNext=NULL
+		q->pNext = p->pNext;
 	}
-	else //p == l.pHead;
+	else //p == l.pHead
 	{
 		l.pHead = p->pNext;
 		if (l.pHead == NULL)
@@ -204,11 +210,13 @@ int RemoveNode_First(LIST &l, Data x)
 	return 1;
 }
 
+//Loại bỏ toàn bộ nút có dữ liệu là x
 void Remove_x(LIST &l, Data x)
 {
-	while (RemoveNode_First(l, x));
+	while (RemoveNode_First(l, x)); //Trong khi còn dữ liệu x ở trong danh sách
 }
 
+//Xóa toàn bộ các phần tử trong danh sách
 void RemoveList(LIST &l)
 {
 	NODE *p;
@@ -221,6 +229,7 @@ void RemoveList(LIST &l)
 	l.pTail = NULL;
 }
 
+//Đếm số nút có trong mảng
 int Count_Node(LIST l)
 {
 	NODE *p;
@@ -234,6 +243,7 @@ int Count_Node(LIST l)
 	return count;
 }
 
+//Đếm số nút có dữ liệu là x trong mảng
 int Count_x(LIST l, Data x)
 {
 	NODE *p;
@@ -248,6 +258,7 @@ int Count_x(LIST l, Data x)
 	return count;
 }
 
+//Tìm nút có giá trị nhỏ nhất trong mảng
 int Min_Node(LIST l)
 {
 	NODE *p = l.pHead;
@@ -261,6 +272,7 @@ int Min_Node(LIST l)
 	return min;
 }
 
+//Kiểm tra x có là số nguyên tố
 bool Prime_Num(Data x)
 {
 	int kq = true;
@@ -281,6 +293,7 @@ bool Prime_Num(Data x)
 	return kq;
 }
 
+//Đếm số nguyên tố có trong danh sách
 int Count_Prime(LIST l)
 {
 	NODE *p = l.pHead;
@@ -294,6 +307,7 @@ int Count_Prime(LIST l)
 	return count;
 }
 
+//Tìm giá trị lớn nhất ở trong mảng
 int Max_Node(LIST l)
 {
 	NODE *p = l.pHead;
@@ -307,11 +321,13 @@ int Max_Node(LIST l)
 	return max;
 }
 
+//Đếm số nút là lớn nhất
 int Count_Max(LIST l)
 {
 	return Count_x(l, Max_Node(l));
 }
 
+//Tính tổng giá trị của các nút trong danh sách
 int Sum(LIST l)
 {
 	int sum = 0;
@@ -324,10 +340,11 @@ int Sum(LIST l)
 	return sum;
 }
 
+//Tính tổng các phần tử phân biệt trong danh sách
 int Sum_Distinct(LIST l)
 {
 	NODE *p = l.pHead;
-	LIST t;
+	LIST t; //Danh sách lưu các phần tử phân biệt trong danh sách l
 	CreateList(t);
 	while (p != NULL)
 	{
@@ -338,6 +355,7 @@ int Sum_Distinct(LIST l)
 	return Sum(t);
 }
 
+//Tính tổng các phần tử chỉ xuất hiện một lần
 int Sum_Unique(LIST l)
 {
 	NODE *p = l.pHead;
@@ -351,6 +369,7 @@ int Sum_Unique(LIST l)
 	return sum;
 }
 
+//Sắp xếp theo chiều tăng dần
 void Sort_Ascending(LIST &l)
 {
 	NODE *p, *q;
@@ -368,6 +387,7 @@ void Sort_Ascending(LIST &l)
 	}
 }
 
+//Tạo và copy toàn bộ dữ liệu của danh sách src sang danh sách dst
 void Copy(LIST &dst, LIST src)
 {
 	CreateList(dst);
@@ -385,6 +405,7 @@ void Copy(LIST &dst, LIST src)
 	}
 }
 
+//Đảo ngược danh sách src sang danh sách dst
 void Reserve(LIST &dst, LIST src)
 {
 	NODE *p = src.pHead;
@@ -396,6 +417,7 @@ void Reserve(LIST &dst, LIST src)
 	}
 }
 
+//Phân phát từng nút của danh sách src sang 2 danh sách con dst1 và dst2
 void Distribute(LIST &dst1, LIST &dst2, LIST src)
 {
 	CreateList(dst1);
@@ -412,6 +434,7 @@ void Distribute(LIST &dst1, LIST &dst2, LIST src)
 	}
 }
 
+//Tách danh sách src thành 2 nửa dst1 và dst2
 void Divide(LIST &dst1, LIST &dst2, LIST src)
 {
 	CreateList(dst1);
@@ -420,9 +443,7 @@ void Divide(LIST &dst1, LIST &dst2, LIST src)
 	int length = Count_Node(src);
 	int t = floor((float)length / 2);
 	for (int i = 0; i < t; i++, p = p->pNext)
-	{
 		InsertTail(dst1, p->info);
-	}
 	for (; p != NULL; p = p->pNext)
 		InsertTail(dst2, p->info);
 }

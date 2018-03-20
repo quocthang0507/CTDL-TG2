@@ -6,7 +6,7 @@ struct NhanVien
 	char ten[10];
 	int namSinh;
 	int tdvh;
-	long int luong;
+	int int luong;
 };
 
 typedef NhanVien Data;
@@ -145,7 +145,7 @@ int Read_File(char *filename, LIST &l)
 	char ten[10];
 	int namSinh;
 	int tdvh;
-	long int luong;
+	int int luong;
 	in >> maNV; strcpy_s(x.maNV, maNV);
 	in >> ho; strcpy_s(x.ho, ho);
 	in >> tenLot; strcpy_s(x.tenLot, tenLot);
@@ -169,11 +169,11 @@ int Read_File(char *filename, LIST &l)
 	return 1;
 }
 
-
-long Sum_Salary(LIST l)
+//Tính tổng lương cần phải trả
+int Sum_Salary(LIST l)
 {
 	NODE *p = l.pHead;
-	long sum = 0;
+	int sum = 0;
 	while (p != NULL)
 	{
 		sum += p->info.luong;
@@ -182,10 +182,11 @@ long Sum_Salary(LIST l)
 	return sum;
 }
 
-long Highest_Salary(LIST l)
+//Tìm tiền lương cao nhất
+int Highest_Salary(LIST l)
 {
 	NODE *p = l.pHead;
-	long max = p->info.luong;
+	inh max = p->info.luong;
 	p = p->pNext;
 	while (p != NULL)
 	{
@@ -196,10 +197,11 @@ long Highest_Salary(LIST l)
 	return max;
 }
 
+//In danh sách các nhân viên có tiền lương cao nhất
 void Print_List_byHighestSalary(LIST l)
 {
 	NODE *p = l.pHead;
-	long max = Highest_Salary(l);
+	int max = Highest_Salary(l);
 	Print_Title();
 	while (p != NULL)
 	{
@@ -210,6 +212,7 @@ void Print_List_byHighestSalary(LIST l)
 	Print_Line();
 }
 
+//In danh sách nhân viên bằng năm sinh cho trước
 void Print_List_byYear(LIST l, int namSinh)
 {
 	NODE *p = l.pHead;
@@ -223,6 +226,7 @@ void Print_List_byYear(LIST l, int namSinh)
 	Print_Line();
 }
 
+//Tạo và copy danh sách src sang danh sách dst
 void Copy(LIST &dst, LIST src)
 {
 	CreateList(dst);
@@ -241,6 +245,7 @@ void Copy(LIST &dst, LIST src)
 	}
 }
 
+//Sắp xếp tăng dần theo tiền lương
 void Sort_Ascending_bySalary(LIST &l)
 {
 	NODE *p = l.pHead, *q;
@@ -257,6 +262,7 @@ void Sort_Ascending_bySalary(LIST &l)
 	}
 }
 
+//Sắp xếp tăng dần theo tên, họ và tên lót
 void Sort_Ascending_byTen_Ho_tenLot(LIST &l)
 {
 	NODE *p = l.pHead, *q;

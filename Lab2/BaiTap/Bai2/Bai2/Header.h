@@ -9,6 +9,7 @@ struct SinhVien
 
 typedef SinhVien Data;
 
+//Định nghĩa hằng số tín chỉ của mỗi môn
 const int M1 = 4;
 const int M2 = 4;
 const int M3 = 2;
@@ -127,6 +128,7 @@ void Print_Result(LIST l)
 	cout << endl;
 }
 
+//Tính điểm trung bình của một sinh viên
 double Calculate_Mark(Data x)
 {
 	double mark;

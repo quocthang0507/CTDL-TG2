@@ -153,6 +153,7 @@ int Read_File(char *filename, LIST &l)
 	return 1;
 }
 
+//Chèn nút có dữ liệu là x vào đầu danh sách
 void InsertHead(LIST &l, Data x)
 {
 	NODE *new_ele = GetNode(x);
@@ -173,6 +174,7 @@ void InsertHead(LIST &l, Data x)
 	}
 }
 
+//Xóa bỏ nút đầu danh sách
 void RemoveHead(LIST &l)
 {
 	NODE *p;
@@ -188,6 +190,7 @@ void RemoveHead(LIST &l)
 		l.pTail == NULL;
 }
 
+//Xóa bỏ nút cuối danh sách
 void RemoveTail(LIST &l)
 {
 	NODE *p, *q;
@@ -211,6 +214,7 @@ void RemoveTail(LIST &l)
 		l.pTail->pNext = NULL;
 }
 
+//Xóa bỏ nút tìm thấy đầu tiên
 int RemoveNode_First(LIST &l, char ten[10])
 {
 	NODE *p = l.pHead, *q = NULL;
@@ -221,15 +225,15 @@ int RemoveNode_First(LIST &l, char ten[10])
 		q = p;
 		p = p->pNext;
 	}
-	if (p == NULL)
+	if (p == NULL) //Danh sách rỗng
 		return 0;
-	if (q != NULL)
+	if (q != NULL) //Tồn tại nút q nằm trước nút p
 	{
 		if (p == l.pTail)
 			l.pTail = q;
 		q->pNext = p->pNext;
 	}
-	else
+	else //p==l.pHead;
 	{
 		l.pHead = p->pNext;
 		if (l.pHead == NULL)
@@ -239,11 +243,13 @@ int RemoveNode_First(LIST &l, char ten[10])
 	return 1;
 }
 
+//Xóa bỏ toàn bộ nút có tên cho trước
 void Remove_x(LIST &l, char ten[10])
 {
-	while (RemoveNode_First(l, ten));
+	while (RemoveNode_First(l, ten)); //Trong khi còn tồn tại tên cho trước trong danh sách
 }
 
+//Xuất danh sách có tên cho trước
 void Print_List_byName(LIST l, char ten[10])
 {
 	NODE *p = l.pHead;
@@ -257,6 +263,7 @@ void Print_List_byName(LIST l, char ten[10])
 	Print_Line();
 }
 
+//Xuất danh sách trùng với năm sinh cho trước
 void Print_List_byYear(LIST l, int namSinh)
 {
 	NODE *p = l.pHead;
@@ -270,6 +277,7 @@ void Print_List_byYear(LIST l, int namSinh)
 	Print_Line();
 }
 
+//Tìm năm sinh nhỏ nhất trong danh sách
 int Min_Year(LIST l)
 {
 	NODE *p = l.pHead;
@@ -284,12 +292,14 @@ int Min_Year(LIST l)
 	return min;
 }
 
+//Xuất danh sách có năm sinh là nhỏ nhất
 void Print_List_byMinYear(LIST l)
 {
 	int min = Min_Year(l);
 	Print_List_byYear(l, min);
 }
 
+//Sắp xếp theo chiều tăng dần của năm sinh
 void Sort_Ascending_byYear(LIST &l)
 {
 	NODE *p = l.pHead, *q;
