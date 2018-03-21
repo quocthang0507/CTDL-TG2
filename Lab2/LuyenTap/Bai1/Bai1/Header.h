@@ -175,7 +175,7 @@ void RemoveTail(LIST &l)
 	l.pTail = q;
 	delete p;
 	if (l.pTail == NULL)
-		l.pHead == NULL;
+		l.pHead = NULL;
 	else
 		l.pTail->pNext = NULL;
 }
@@ -406,7 +406,7 @@ void Copy(LIST &dst, LIST src)
 }
 
 //Đảo ngược danh sách src sang danh sách dst
-void Reserve(LIST &dst, LIST src)
+void Reverse(LIST &dst, LIST src)
 {
 	NODE *p = src.pHead;
 	CreateList(dst);

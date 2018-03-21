@@ -197,7 +197,7 @@ void XuLyMenu(int menu, LIST &l)
 		cout << "\n19. Dao nguoc danh sach l.\n";
 		cout << "\nDanh sach ban dau:\n";
 		PrintList(l);
-		Reserve(l1, l);
+		Reverse(l1, l);
 		cout << "\nDanh sach sau khi dao nguoc:\n";
 		PrintList(l1);
 		break;

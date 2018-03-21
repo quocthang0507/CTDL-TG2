@@ -6,7 +6,7 @@ struct NhanVien
 	char ten[10];
 	int namSinh;
 	int tdvh;
-	int int luong;
+	int luong;
 };
 
 typedef NhanVien Data;
@@ -16,6 +16,7 @@ struct tagNode
 	Data info;
 	tagNode *pNext;
 };
+
 
 typedef tagNode NODE;
 
@@ -145,7 +146,7 @@ int Read_File(char *filename, LIST &l)
 	char ten[10];
 	int namSinh;
 	int tdvh;
-	int int luong;
+	int luong;
 	in >> maNV; strcpy_s(x.maNV, maNV);
 	in >> ho; strcpy_s(x.ho, ho);
 	in >> tenLot; strcpy_s(x.tenLot, tenLot);
@@ -186,7 +187,7 @@ int Sum_Salary(LIST l)
 int Highest_Salary(LIST l)
 {
 	NODE *p = l.pHead;
-	inh max = p->info.luong;
+	int max = p->info.luong;
 	p = p->pNext;
 	while (p != NULL)
 	{
