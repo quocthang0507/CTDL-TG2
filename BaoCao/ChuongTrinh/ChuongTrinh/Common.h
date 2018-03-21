@@ -17,7 +17,8 @@ typedef int CostType;		//Trọng số
 struct Edge
 {
 	int Marked;				//Trạng thái
-	char Target;			//Đỉnh cuối
+	char source;			//Đỉnh đầu
+	char target;			//Đỉnh cuối
 	CostType Weight;		//Trọng số
 	Edge* Next;				//Cạnh tiếp
 };
@@ -26,7 +27,6 @@ struct Vertex
 {
 	LabelType Label;		//Nhãn của đỉnh
 	int Visited;			//Trạng thái
-	Edge* EdgeList;			//DS cạnh kề
 };
 
 struct Path					//Một đoạn đường đi
@@ -35,9 +35,7 @@ struct Path					//Một đoạn đường đi
 	int Parent;				//Đỉnh trước
 };
 
-typedef Path* PathPtr;
 typedef Edge* EdgePtr;
-typedef Vertex* VertexPtr;
 
 struct Graph
 {
