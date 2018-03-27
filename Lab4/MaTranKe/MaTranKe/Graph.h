@@ -1,3 +1,4 @@
+﻿//Tạo một đỉnh có nhãn l
 Vertex CreateVertex(LabelType l)
 {
 	Vertex v;
@@ -6,11 +7,51 @@ Vertex CreateVertex(LabelType l)
 	return v;
 }
 
+//Tìm chỉ số của một đỉnh, nếu không có thì trả về -1
+int FindIndexOfVertex(Graph g, LabelType l)
+{
+	for (size_t i = 0; i < MAX; i++)
+		if (g.Vertices[i].label == l)
+			return i;
+	return -1;
+}
+
+//Hiển thị thông tin của một đỉnh dựa vào vị trí pos
+void DisplayInfoVertex(Graph g, int pos)
+{
+	cout << "\nCac dinh ke voi " << g.Vertices[pos].label << " la:";
+	for (size_t i = 0; i < g.numVertices; i++)
+	{
+		if (g.cost[pos][i] != ZERO)
+			cout << '\t' << g.Vertices[i].label;
+	}
+}
+
+//Hiển thị tên đỉnh
 void DisplayVertex(Graph g, int pos)
 {
 	cout << g.Vertices[pos].label << '\t';
 }
 
+//Xuất ma trận kề
+void DisplayMatrix(Graph g)
+{
+	cout << endl;
+	for (size_t i = 0; i < g.numVertices; i++)
+		cout << '\t' << g.Vertices[i].label;
+	cout << endl;
+	for (size_t i = 0; i < g.numVertices; i++)
+	{
+		cout << g.Vertices[i].label << '\t';
+		for (size_t j = 0; j < g.numVertices; j++)
+		{
+			cout << g.cost[i][j] << '\t';
+		}
+		cout << endl;
+	}
+}
+
+//Khởi tạo đồ thị
 Graph InitGraph(bool directed)
 {
 	Graph g;
@@ -21,19 +62,21 @@ Graph InitGraph(bool directed)
 		for (size_t j = 0; j < g.numVertices; j++)
 		{
 			if (i == j)
-				g.cost[i][j] = 0;
+				g.cost[i][j] = 0;	//Đường chéo chính
 			else
-				g.cost[i][j] = INF;
+				g.cost[i][j] = INF;	//Còn lại là vô cùng
 		}
 	return g;
 }
 
+//Đánh dấu lại trạng thái của các đỉnh
 void ResetFlags(Graph &g)
 {
 	for (size_t i = 0; i < g.numVertices; i++)
 		g.Vertices[i].visited = NO;
 }
 
+//Kiểm tra 2 đỉnh có vị trí start và end có kề nhau (có cạnh nối với nhau)
 int IsConnected(Graph g, int start, int end)
 {
 	if (g.cost[start][end] == 0 || g.cost[start][end] == INF)
@@ -41,20 +84,29 @@ int IsConnected(Graph g, int start, int end)
 	else return 1;
 }
 
+//Thêm một đỉnh có nhãn l vào đồ thị
 void AddVertex(Graph &g, LabelType l)
 {
 	Vertex v = CreateVertex(l);
 	g.Vertices[g.numVertices] = v;
 	g.numVertices++;
+	for (size_t i = 0; i < g.numVertices; i++)
+	{
+		g.cost[i][g.numVertices - 1] = ZERO;
+		g.cost[g.numVertices - 1][i] = ZERO;
+	}
 }
 
+//Thêm một cạnh vào đồ thị
 void AddEdge(Graph &g, int start, int end, CostType weight, bool directed)
 {
-	if (IsConnected(g, start, end) == 0)
+	if (IsConnected(g, start, end) == 0)	//Nếu 2 đỉnh không kề nhau
+	{
 		g.numEdges++;
-	g.cost[start][end] = weight;
-	if (directed == false)
-		g.cost[end][start] = weight;
+		g.cost[start][end] = weight;
+		if (directed == false)				//Nếu là đồ thị vô hướng
+			g.cost[end][start] = weight;
+	}
 }
 
 void AddEdge(Graph &g, int start, int end, CostType weight)
@@ -67,15 +119,16 @@ void AddEdge(Graph &g, int start, int end)
 	AddEdge(g, start, end, 1);
 }
 
+//Lưu đồ thị vào tập tin
 void SaveGraph(Graph g, char *filename)
 {
 	ofstream os(filename);
 	os << g.numVertices << '\n';
 	os << g.numEdges << '\n';
 	os << g.directed << '\n';
-	for (size_t i = 0; i < g.numVertices; i++)
+	for (size_t i = 0; i < g.numVertices; i++)	//Lưu tên các đỉnh
 		os << g.Vertices[i].label << '\n';
-	for (size_t i = 0; i < g.numVertices; i++)
+	for (size_t i = 0; i < g.numVertices; i++)	//Lưu ma trận kề
 	{
 		for (size_t j = 0; j < g.numVertices; j++)
 			os << g.cost[i][j] << '\t';
@@ -84,7 +137,8 @@ void SaveGraph(Graph g, char *filename)
 	os.close();
 }
 
-void OpenGraph(Graph &g, char *filename)
+//Đọc dữ liệu từ tập tin
+int OpenGraph(Graph &g, char *filename)
 {
 	ifstream is(filename);
 	if (is.is_open())
@@ -92,26 +146,27 @@ void OpenGraph(Graph &g, char *filename)
 		int n = 0, m = 0;
 		bool d = false;
 		LabelType l;
-		is >> n;
-		is >> m;
-		is >> d;
+		is >> n;	//Số đỉnh
+		is >> m;	//Số cạnh
+		is >> d;	//Loại đồ thị
 		g = InitGraph(d);
 		g.numEdges = m;
-		g.numVertices = n;
-		for (size_t i = 0; i < g.numVertices; i++)
+		for (size_t i = 0; i < n; i++)	//Khởi tạo nhãn của các đỉnh
 		{
 			is >> l;
 			AddVertex(g, l);
 		}
-		for (size_t i = 0; i < g.numVertices; i++)
-			for (size_t j = 0; j < g.numVertices; j++)
+		for (size_t i = 0; i < n; i++)	//Đọc ma trận kề
+			for (size_t j = 0; j < n; j++)
 				is >> g.cost[i][j];
 		is.close();
+		return 1;
 	}
 	else
-		cout << "\nLoi khong the mo file!";
+		return 0;
 }
 
+//Tìm đỉnh kề với curr mà chưa xét
 int FindFirstAdjacentVertex(Graph g, int curr)
 {
 	for (size_t i = 0; i < g.numVertices; i++)
@@ -120,6 +175,8 @@ int FindFirstAdjacentVertex(Graph g, int curr)
 	return NULLDATA;
 }
 
+//Duyệt đồ thị theo chiều sau (Depth First Search)
+//Mô tả: Đi tiếp đến khi nào không đi đến được nữa thì lùi lại và tìm đường đi mới, và một đỉnh không đi qua 2 lần
 void DFS_Recursion(Graph &g, int start)
 {
 	g.Vertices[start].visited = YES;
@@ -144,6 +201,7 @@ void DFS_Loop(Graph &g, int start)
 	while (!s.empty())
 	{
 		curr = s.top();
+		s.pop();
 		adj = FindFirstAdjacentVertex(g, curr);
 		if (adj == NULLDATA)
 			s.pop();
@@ -156,6 +214,8 @@ void DFS_Loop(Graph &g, int start)
 	}
 }
 
+//Duyệt đồ thị theo chiều rộng (Breadth First Search)
+//Mô tả: Đi từ gốc, sau đó đi tới các đỉnh kề với đỉnh gốc và tiếp tục đi tới các đỉnh kề với các đỉnh đã xét
 void BFS(Graph g, int start)
 {
 	g.Vertices[start].visited = YES;
@@ -165,6 +225,7 @@ void BFS(Graph g, int start)
 	while (!q.empty())
 	{
 		curr = q.front();
+		q.pop();
 		DisplayVertex(g, curr);
 		while (true)
 		{
