@@ -200,6 +200,19 @@ void DFS_Recursion(Graph &g, int start)
 	}
 }
 
+void DFS_Recursion_WithoutDisplay(Graph &g, int start)
+{
+	g.Vertices[start].visited = YES;
+	while (true)
+	{
+		int t = FindFirstAdjacentVertex(g, start);
+		if (t == NULLDATA)
+			break;
+		else
+			DFS_Recursion_WithoutDisplay(g, t);
+	}
+}
+
 void DFS_Loop(Graph &g, int start)
 {
 	ResetFlags(g);
@@ -249,4 +262,20 @@ void BFS(Graph g, int start)
 			}
 		}
 	}
+}
+
+bool EditWeight(Graph &g, int u, int v, int w)
+{
+	if (IsConnected(g, u, v))
+	{
+		if (g.directed == true)
+			g.cost[u][v] = w;
+		else
+		{
+			g.cost[u][v] = w;
+			g.cost[v][u] = w;
+		}
+		return true;
+	}
+	return false;
 }

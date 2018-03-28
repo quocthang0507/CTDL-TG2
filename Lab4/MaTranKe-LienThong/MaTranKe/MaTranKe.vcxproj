@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Connectivity.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="Menu.h" />
   </ItemGroup>

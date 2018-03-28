@@ -22,7 +22,7 @@ int main()
 void ChayChuongTrinh()
 {
 	Graph g;
-	int menu, soMenu = 8;
+	int menu, soMenu = 12;
 	do
 	{
 		menu = ChonMenu(soMenu);

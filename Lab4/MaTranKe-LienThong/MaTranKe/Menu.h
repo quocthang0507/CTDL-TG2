@@ -10,6 +10,10 @@
 	cout << "\n6. Luu thong tin do thi xuong file";
 	cout << "\n7. Duyet do thi theo chieu rong";
 	cout << "\n8. Duyet do thi theo chieu sau";
+	cout << "\n9. Kiem tra xem do thi G co lien thong hay khong ?";
+	cout << "\n10. Neu khong, dem so thanh phan lien thong cua do thi G.";
+	cout << "\n11. Liet ke cac thanh phan(do thi con) lien thong cua do thi G";
+	cout << "\n12. Thay doi trong so giua 2 dinh u va v";
 	cout << "\n==============================================================";
 }
 
@@ -140,6 +144,39 @@ void XuLyMenu(int menu, Graph &g)
 		DFS_Loop(g, p1);
 		/*ResetFlags(g);
 		DFS_Recursion(g, p1);*/
+		break;
+	case 9:
+		cout << "\n9. Kiem tra xem do thi G co lien thong hay khong ?\n";
+		if (TestGraphConnectivity(g) == 1)
+			cout << "\nDo thi G co lien thong";
+		else cout << "\nDo thi G khong co lien thong";
+		break;
+	case 10:
+		cout << "\n10. Neu khong, dem so thanh phan lien thong cua do thi G.\n";
+		cout << "\nCo " << TestGraphConnectivity(g) << " thanh phan lien thong trong do thi";
+		break;
+	case 11:
+		cout << "\n11. Liet ke cac thanh phan(do thi con) lien thong cua do thi G\n";
+		FindConnectedComponent(g);
+		break;
+	case 12:
+		cout << "\n12. Thay doi trong so giua 2 dinh u va v\n";
+		do
+		{
+			cout << "\nNhap dinh u : ";
+			cin >> u;
+			cout << "\nNhap dinh v : ";
+			cin >> v;
+			p1 = FindIndexOfVertex(g, u);
+			p2 = FindIndexOfVertex(g, v);
+		} while (p1 == -1 || p2 == -1);
+		cout << "\nNhap trong so w : ";
+		cin >> w;
+		cout << "\Danh sach ban dau:";
+		DisplayMatrix(g);
+		EditWeight(g, p1, p2, w);
+		cout << "\nDanh sach moi:";
+		DisplayMatrix(g);
 		break;
 	default:
 		break;
