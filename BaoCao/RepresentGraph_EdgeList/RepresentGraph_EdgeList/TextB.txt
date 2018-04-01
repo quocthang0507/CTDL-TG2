@@ -1,0 +1,25 @@
+8
+22
+0
+A B 2
+A C 3
+B A 2
+B D 2
+C A 3
+C D 1
+D B 2
+D B 1
+D E 2
+D F 4
+E D 2
+E F 1
+E G 2
+F D 4
+F E 1
+F G 2
+F H 1
+G E 2
+G F 2
+G H 3
+H F 1
+H F 3

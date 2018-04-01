@@ -9,7 +9,6 @@ using namespace std;
 
 #include "Common.h"
 #include "Graph.h"
-#include "Connectivity.h"
 #include "Menu.h"
 
 void ChayChuongTrinh();
