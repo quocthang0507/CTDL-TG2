@@ -2,6 +2,7 @@
 #include <conio.h>
 #include <fstream>
 #include <string.h>
+#include <list>
 #include <stack>
 #include <queue>
 
