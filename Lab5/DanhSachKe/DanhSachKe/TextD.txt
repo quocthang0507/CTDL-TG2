@@ -1,0 +1,21 @@
+6
+18
+0
+a b 4
+a c 2
+a e 3
+b a 4
+b d 5
+c a 2
+c d 1
+c e 6
+c f 3
+d b 5
+d c 1
+d f 6
+e a 3
+e c 6
+e f 2
+f c 3
+f d 6
+f e 2
