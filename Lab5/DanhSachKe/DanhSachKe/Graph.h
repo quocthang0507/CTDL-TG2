@@ -8,7 +8,7 @@ VertexPtr CreateVertex(LabelType l)
 	return v;
 }
 
-//Tạo một cạnh chỉ đến đỉnh l thành một phần tử trong danh sách cạnh
+//Tạo một cạnh chỉ đến đỉnh kề trong danh sách cạnh
 EdgePtr CreateEdge(char l, CostType w)
 {
 	EdgePtr e = new Edge;
@@ -80,7 +80,7 @@ EdgePtr FindEdge(Graph g, char start, char end)
 	EdgePtr ds = g.Vertices[v]->EdgeList;	//Trỏ tới danh sách đỉnh kề với đỉnh start
 	while (ds != NULL)
 	{
-		if (ds->target = end)		//Nếu ds tồn tại đỉnh end nghĩa là có tồn tại cạnh nối
+		if (ds->target == end)		//Nếu ds tồn tại đỉnh end nghĩa là có tồn tại cạnh nối
 			break;
 		ds = ds->Next;
 	}
@@ -143,26 +143,21 @@ void SaveGraph(Graph g, char *filename)
 	out << g.numVertices << '\n';
 	out << g.numEdges << '\n';
 	out << g.directed << '\n';
-	for (size_t i = 0; i < g.numVertices; i++)	//Lưu tên các đỉnh
-		out << g.Vertices[i]->label << '\n';
-	for (size_t i = 0; i < g.numVertices; i++)	//Lưu ma trận kề
+	for (size_t i = 0; i < g.numVertices; i++)	//Ghi tên các đỉnh
+		out << g.Vertices[i]->label << '\t';
+	out << endl;
+	for (size_t i = 0; i < g.numVertices; i++)	//Ghi ma trận kề
 	{
 		for (size_t j = 0; j < g.numVertices; j++)
 		{
-			if (i == j)
-				out << '0' << '\t';
-			else
-			{
-				if (IsConnected(g, g.Vertices[i]->label, g.Vertices[j]->label))
-				{
-					EdgePtr t = FindEdge(g, g.Vertices[i]->label, g.Vertices[j]->label);
-					out << g.Vertices[j]->EdgeList->weight << '\t';
-				}
-				else out << "1000" << '\t';
-			}
+			EdgePtr e = FindEdge(g, g.Vertices[i]->label, g.Vertices[j]->label);
+			if (e == NULL)
+				if (i == j)
+					out << 0 << '\t';
+				else out << 1000 << '\t';
+			else out << e->weight << '\t';
 		}
-		if (i != g.numVertices - 1)
-			out << '\n';
+		out << endl;
 	}
 	out.close();
 }
@@ -173,7 +168,7 @@ int OpenGraph(Graph &g, char *filename)
 	ifstream in(filename);
 	if (in.is_open())
 	{
-		int n = 0, m = 0, w = 0;
+		int n = 0, m = 0, w = 0, t;
 		bool d = false;
 		LabelType l;
 		in >> n;	//Số đỉnh
@@ -186,24 +181,18 @@ int OpenGraph(Graph &g, char *filename)
 			VertexPtr v = CreateVertex(l);
 			AddVertex(g, v);
 		}
-		l = ' ';
-		int vt;
-		for (size_t i = 0; i < m; i++)	//Đọc ma trận kề
+		for (size_t i = 0; i < n; i++)
 		{
-			char s, t;
-			in >> s;
-			in >> t;
-			in >> w;
-			if (l != s)
+			for (size_t j = 0; j < n; j++)
 			{
-				l = s;
-				vt = FindIndexOfVertex(g, s);
+				in >> t;
+				if (t != 1000 && t != 0)
+				{
+					EdgePtr e = CreateEdge(g.Vertices[j]->label, t);
+					AddEdge(g.Vertices[i]->EdgeList, e);
+					g.numEdges++;
+				}
 			}
-			if (w == NULL)
-				w = 1;
-			EdgePtr e = CreateEdge(t, w);
-			AddEdge(g.Vertices[vt]->EdgeList, e);
-			g.numEdges++;
 		}
 		in.close();
 		return 1;
@@ -215,35 +204,36 @@ int OpenGraph(Graph &g, char *filename)
 //Tìm đỉnh kề với curr mà chưa xét
 char FindFirstAdjacentVertex(Graph g, char cur)
 {
-	for (size_t i = 0; i < g.numVertices; i++)
-		if (g.Vertices[i]->label == cur)
-		{
-			EdgePtr p = g.Vertices[i]->EdgeList;
-			while (p != NULL)
+	int v = FindIndexOfVertex(g, cur);
+	if (v != -1)
+	{
+			EdgePtr e = g.Vertices[v]->EdgeList;
+			while (e != NULL)
 			{
 				for (size_t j = 0; j < g.numVertices; j++)
-					if (g.Vertices[j]->label == p->target && g.Vertices[j]->visited == NO)
-						return p->target;
-				p = p->Next;
+					if (g.Vertices[j]->label == e->target && g.Vertices[j]->visited == NO)
+						return e->target;
+				e = e->Next;
 			}
-		}
+	}
 	return NULLDATA;
 }
 
 //Duyệt đồ thị theo chiều sau (Depth First Search)
 //Mô tả: Đi tiếp đến khi nào không đi đến được nữa thì lùi lại và tìm đường đi mới, và một đỉnh không đi qua 2 lần
-void DFS_Recursion(Graph &g, int start)
+void DFS_Recursion(Graph &g, char start)
 {
-	//g.Vertices[start].visited = YES;
-	//DisplayVertex(g, start);
-	//while (true)
-	//{
-	//	int t = FindFirstAdjacentVertex(g, start);
-	//	if (t == NULLDATA)
-	//		break;
-	//	else
-	//		DFS_Recursion(g, t);
-	//}
+	int vt = FindIndexOfVertex(g, start);
+	g.Vertices[vt]->visited = YES;
+	cout << start << '\t';
+	while (true)
+	{
+		char t = FindFirstAdjacentVertex(g, start);
+		if (t == NULLDATA)
+			break;
+		else
+			DFS_Recursion(g, t);
+	}
 }
 
 void DFS_Loop(Graph &g, char start)
@@ -278,6 +268,7 @@ void BFS(Graph g, char start)
 	ResetFlags(g);
 	int vt = FindIndexOfVertex(g, start);
 	g.Vertices[vt]->visited = YES;
+	cout << start << '\t';
 	queue<int>q;
 	q.push(start);
 	char cur, adj;
@@ -302,28 +293,24 @@ void BFS(Graph g, char start)
 	}
 }
 
+//Hiển thị ma trận kề
 void DisplayMatrix(Graph g)
 {
+	cout << endl;
 	for (size_t i = 0; i < g.numVertices; i++)	//Ghi tên các đỉnh
-		cout << g.Vertices[i]->label << '\n';
-	for (size_t i = 0; i < g.numVertices; i++)	//Ghi ma trận
+		cout << g.Vertices[i]->label << '\t';
+	cout << endl;
+	for (size_t i = 0; i < g.numVertices; i++)
 	{
 		for (size_t j = 0; j < g.numVertices; j++)
 		{
-			if (i == j)
-				cout << '0' << '\t';
-			else
-			{
-				if (IsConnected(g, g.Vertices[i]->label, g.Vertices[j]->label))
-				{
-					EdgePtr t = FindEdge(g, g.Vertices[i]->label, g.Vertices[j]->label);
-					cout << g.Vertices[j]->EdgeList->weight << '\t';
-				}
+			EdgePtr e = FindEdge(g, g.Vertices[i]->label, g.Vertices[j]->label);
+			if (e == NULL)
+				if (i == j)
+					cout << "0" << '\t';
 				else cout << "INF" << '\t';
-			}
+			else cout << e->weight << '\t';
 		}
-		if (i != g.numVertices - 1)
-			cout << '\n';
+		cout << endl;
 	}
-
 }

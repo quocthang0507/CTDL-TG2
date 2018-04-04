@@ -73,17 +73,23 @@ void DisplayVertices(Graph g)
 		DisplayVertex(g, i);
 }
 
-//Kiểm tra có 2 đỉnh kề nhau không?
-int IsConnected(Graph g, char u, char v)
+//Tìm và trả về trọng số của 2 cạnh
+int FindEdge(Graph g, char start, char end)
 {
 	Edge *e = g.ListEdges;
 	while (e != NULL)
 	{
-		if ((e->info.Source == u) && (e->info.Target == v))
-			return 1;
+		if (e->info.Source == start && e->info.Target == end)
+			return e->info.Weight;
 		e = e->Next;
 	}
-	return 0;
+	return NULLDATA;
+}
+
+//Kiểm tra có 2 đỉnh kề nhau không?
+int IsConnected(Graph g, char u, char v)
+{
+	return (FindEdge(g, u, v) != NULLDATA);
 }
 
 //Xuất tiêu đề
@@ -148,8 +154,23 @@ void AddEdge(Graph &g, char start, char end, CostType w, bool directed)
 {
 	if (!IsConnected(g, start, end))		//Nếu 2 đỉnh không kề
 	{
-		g.NumEdges++;						//Thì tăng số cạnh lên 1
-		AddEdge(g.ListEdges, CreateEdge(start, end, w)); //Và thêm cạnh đó vào
+		AddEdge(g.ListEdges, CreateEdge(start, end, w)); //Thì thêm cạnh đó vào
+		g.NumEdges++;
+		if (!directed)						//Nếu nó là đồ thị vô hướng
+		{
+			AddEdge(g.ListEdges, CreateEdge(end, start, w)); //Thì thêm cạnh ngược của n
+			g.NumEdges++;
+		}
+	}
+	else									//Còn nếu tồn tại trong danh sách rồi
+	{
+		Edge *e = g.ListEdges;
+		while (e != NULL)
+		{
+			if (e->info.Source == start && e->info.Target == end)
+				e->info.Weight = w;			//Thì thay trọng số mới vào
+			e = e->Next;
+		}
 	}
 }
 
@@ -165,22 +186,26 @@ int OpenFile(char *f, Graph &g)
 	ifstream in(f);
 	if (in.is_open())
 	{
-		int a, b, w;
+		int a, b, w, t;
 		char x, y;
+		char l;
 		bool directed;
-		in >> a;					//Đọc số đỉnh
-		in >> b;					//Đọc số cạnh
-		in >> directed;				//Đọc hướng đồ thị
-		g = InitGraph(directed);	//Khởi tạo đồ thị
-		for (int i = 0; i < b; i++)
+		in >> a;						//Đọc số đỉnh
+		in >> b;						//Đọc số cạnh
+		in >> directed;					//Đọc hướng đồ thị
+		g = InitGraph(directed);		//Khởi tạo đồ thị
+		for (size_t i = 0; i < a; i++)	//Đọc tên đỉnh
 		{
-			in >> x;		//Đỉnh đầu
-			in >> y;		//Đỉnh cuối
-			in >> w;		//Trọng số			
-			AddEdge(g, x, y, w, g.Directed); //Thêm cạnh vào đồ thị
-			AddVertex(g, x);	//Thêm đỉnh đầu vào danh sách đỉnh
-			AddVertex(g, y);	//Thêm đỉnh cuối vào danh sách đỉnh
+			in >> l;
+			AddVertex(g, l);
 		}
+		for (size_t i = 0; i < a; i++)	//Đọc ma trận
+			for (size_t j = 0; j < a; j++)
+			{
+				in >> t;
+				if (t != 1000 && t != 0)
+					AddEdge(g, g.Vertices[i].Label, g.Vertices[j].Label, t);
+			}
 		in.close();
 		return 1;
 	}
@@ -193,13 +218,23 @@ void SaveGraph(Graph g, char *f)
 {
 	ofstream out(f);
 	Edge *e = g.ListEdges;
-	out << g.NumVertices << '\t';   //Ghi số đỉnh
-	out << g.NumEdges << '\t';		//Ghi số cạnh
-	out << g.Directed;				//Ghi kiểu đồ thị
-	while (e != NULL)				//Xuất danh sách cạnh
+	out << g.NumVertices << '\n';   //Ghi số đỉnh
+	out << g.NumEdges << '\n';		//Ghi số cạnh
+	out << g.Directed << '\n';		//Ghi kiểu đồ thị
+	for (size_t i = 0; i < g.NumVertices; i++)
+		out << g.Vertices[i].Label << '\t';
+	for (size_t i = 0; i < g.NumVertices; i++)
 	{
-		out << '\n' << e->info.Source << '\t' << e->info.Target << '\t' << e->info.Weight;
-		e = e->Next;
+		out << endl;
+		for (size_t j = 0; j < g.NumVertices; j++)
+		{
+			int t = FindEdge(g, g.Vertices[i].Label, g.Vertices[j].Label);
+			if (t == NULLDATA)
+				if (i == j)
+					out << 0 << '\t';
+				else out << 1000 << '\t';
+			else out << t << '\t';
+		}
 	}
 	out.close();
 }
@@ -225,7 +260,6 @@ void DisplayEdges(Graph g)
 	cout << endl;
 }
 
-
 //Thiết lập lai trạng thái cờ của các đỉnh, cạnh
 void ResetFlags(Graph &g)
 {
@@ -246,17 +280,17 @@ char FindFirstAdjacentVertex(Graph g, char cur)
 	for (size_t i = 0; i < g.NumVertices; i++)
 		if (g.Vertices[i].Label == cur)
 			for (size_t j = 0; j < g.NumVertices; j++)
-				if (IsConnected(g, cur, g.Vertices[j].Label) && g.Vertices[j].Visited == NO)
+				if (g.Vertices[j].Visited == NO && IsConnected(g, cur, g.Vertices[j].Label))
 					return g.Vertices[j].Label;
 	return NULLDATA;
 }
 
-//Duyệt đồ thị theo chiều sâu
-void DFS(Graph g, char start)
+//Duyệt đồ thị theo chiều sâu bằng vòng lặp
+void DFS_Loop(Graph g, char start)
 {
 	ResetFlags(g);
 	int index = FindIndexVertex(g, start);
-	g.Vertices[index].Visited = YES;		//Đánh dấu đỉnh đã xét
+	g.Vertices[index].Visited = YES;	//Đánh dấu đỉnh đã xét
 	cout << start << '\t';
 	stack<char> s;						//Tạo stack 
 	s.push(start);						//Thêm đỉnh start vào stack
@@ -274,6 +308,23 @@ void DFS(Graph g, char start)
 			g.Vertices[index].Visited = YES;
 			s.push(adj);
 		}
+	}
+}
+
+//Duyệt đồ thị theo chiều sâu bằng đệ quy
+void DFS_Recursion(Graph &g, char start)
+{
+	int vt = FindIndexVertex(g, start);
+	g.Vertices[vt].Visited = YES;
+	cout << start << '\t';
+	char adj;
+	while (true)
+	{
+		adj = FindFirstAdjacentVertex(g, start);
+		if (adj == NULLDATA)
+			break;
+		else
+			DFS_Recursion(g, adj);
 	}
 }
 

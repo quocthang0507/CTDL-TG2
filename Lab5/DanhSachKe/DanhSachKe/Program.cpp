@@ -21,7 +21,7 @@ int main()
 void ChayChuongTrinh()
 {
 	Graph g;
-	int menu, soMenu = 8;
+	int menu, soMenu = 10;
 	do
 	{
 		menu = ChonMenu(soMenu);

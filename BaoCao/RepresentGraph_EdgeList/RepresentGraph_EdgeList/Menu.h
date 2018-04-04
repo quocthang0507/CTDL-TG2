@@ -10,7 +10,8 @@ void XuatMenu()
 	cout << "\n6. Them mot canh co trong so w noi 2 dinh u, v vao do thi";
 	cout << "\n7. Luu thong tin do thi xuong file";
 	cout << "\n8. Duyet do thi theo chieu rong";
-	cout << "\n9. Duyet do thi theo chieu sau";
+	cout << "\n9. Duyet do thi theo chieu sau bang vong lap";
+	cout << "\n10. Duyet do thi theo chieu sau bang de quy";
 	cout << "\n==============================================================";
 }
 
@@ -99,23 +100,23 @@ void XuLyMenu(int menu, Graph &g)
 		cout << "\n6. Them mot canh co trong so w noi 2 dinh u, v vao do thi\n";
 		do
 		{
-			do
-			{
-				cout << endl << "Nhap dinh u : ";
-				cin >> u;
-			} while (FindIndexVertex(g, u) == -1);
-			do
-			{
-				cout << endl << "Nhap dinh v : ";
-				cin >> v;
-			} while (FindIndexVertex(g, v) == -1);
-		} while (IsConnected(g, u, v));
+			cout << endl << "Nhap dinh u : ";
+			cin >> u;
+		} while (FindIndexVertex(g, u) == -1);
+		do
+		{
+			cout << endl << "Nhap dinh v : ";
+			cin >> v;
+		} while (FindIndexVertex(g, v) == -1);
 		do
 		{
 			cout << "\nNhap trong so w : ";
 			cin >> w;
 		} while (w < 1);
+		cout << "\nDanh sach ban dau: ";
+		DisplayEdges(g);
 		AddEdge(g, u, v, w);
+		cout << "\nDanh sach moi: ";
 		DisplayEdges(g);
 		break;
 	case 7:
@@ -132,13 +133,23 @@ void XuLyMenu(int menu, Graph &g)
 		BFS(g, u);
 		break;
 	case 9:
-		cout << "\n9. Duyet do thi theo chieu sau\n";
+		cout << "\n9. Duyet do thi theo chieu sau bang vong lap\n";
 		do
 		{
 			cout << endl << "Nhap dinh bat dau : ";
 			cin >> u;
 		} while (FindIndexVertex(g, u) == -1);
-		DFS(g, u);
+		DFS_Loop(g, u);
+		break;
+	case 10:
+		cout << "\n9. Duyet do thi theo chieu sau bang de quy\n";
+		do
+		{
+			cout << endl << "Nhap dinh bat dau : ";
+			cin >> u;
+		} while (FindIndexVertex(g, u) == -1);
+		ResetFlags(g);
+		DFS_Recursion(g, u);
 		break;
 	default:
 		break;

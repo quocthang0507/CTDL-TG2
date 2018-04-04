@@ -13,7 +13,7 @@ using namespace std;
 
 int main()
 {
-	int soMenu = 9, menu;
+	int soMenu = 10, menu;
 	Graph g;
 	do
 	{
