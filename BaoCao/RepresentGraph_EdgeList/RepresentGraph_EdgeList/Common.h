@@ -3,23 +3,23 @@
 
 //Định nghĩa các hằng số
 
-#define UPPER 100
-#define ZERO 0
-#define MAX 20
-#define INF 1000
-#define YES 1
-#define NO 0
-#define NULLDATA -1
+#define UPPER 100 	//Số phần tử tối đa
+#define ZERO 0 		//Giá trị 0
+#define MAX 20 		//Số đỉnh tối đa
+#define INF 1000 	//Vô cùng
+#define YES 1 		//Đã xét
+#define NO 0 		//Chưa xét
+#define NULLDATA -1 //Giá trị rỗng
 
 //Định nghĩa các kiểu dữ liệu
 
-typedef char LaberType;
-typedef int CostType;
+typedef char LabelType; //Kiểu tên nhãn là một ký tự
+typedef int CostType; //Trọng số
 
 //Định nghĩa cấu trúc của một đỉnh mới
 struct Vertex
 {
-	LaberType Label;
+	LabelType Label;
 	int		  Visited;
 };
 

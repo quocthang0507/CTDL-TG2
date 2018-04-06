@@ -1,5 +1,5 @@
 ﻿//Tạo và trả về đỉnh có nhãn là lab
-Vertex CreateVertex(LaberType lab)
+Vertex CreateVertex(LabelType lab)
 {
 	Vertex v;
 	v.Label = lab;
@@ -51,7 +51,7 @@ int FindIndexVertex(Graph g, char v)
 }
 
 //Thêm một đỉnh vào danh sách đỉnh
-void AddVertex(Graph &g, LaberType lab)
+void AddVertex(Graph &g, LabelType lab)
 {
 	if (FindIndexVertex(g, lab) == -1)					//Nếu chưa có đỉnh lab trong đồ thị
 	{
