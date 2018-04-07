@@ -34,7 +34,7 @@ void XuLyMenu(int menu, Graph &g)
 {
 	int stt;
 	char filename[10] = "Text_.txt";
-	LaberType u, v;
+	LabelType u, v;
 	int w;
 	system("cls");
 	switch (menu)
