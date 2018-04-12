@@ -3,17 +3,17 @@
 	cout << "\n===================== HE THONG CHUC NANG =====================";
 	cout << "\n0. Thoat khoi chuong trinh";
 	cout << "\n1. Doc du lieu tu tap tin";
-	cout << "\n2. Them mot dinh co nhan label vao do thi";
-	cout << "\n3. Xuat thong tin cua mot dinh trong do thi";
-	cout << "\n4. Kiem tra hai dinh u, v co ke nhau (co canh noi giua chung) hay khong?";
-	cout << "\n5. Them mot canh co trong so w noi 2 dinh u, v vao do thi";
-	cout << "\n6. Luu thong tin do thi xuong file";
-	cout << "\n7. Duyet do thi theo chieu rong";
-	cout << "\n8. Duyet do thi theo chieu sau";
-	cout << "\n\n9. Tim cay bao trum toi thieu bang thuat toan Prim";
-	cout << "\n10. Tim cay bao trum toi thiu bang thuat toan Kruskal";
-	//cout << "\n\n11. Tim duong di ngan nhat tu mot dinh toi cac dinh con lai dung thuat toan Dijkstra";
-	//cout << "\n12. Tim duong di ngan nhat tu mot dinh toi cac dinh con lai dung thuat toan Floyd";
+	cout << "\n2. Xuat ma tran ke ra man hinh";
+	cout << "\n3. Them mot dinh co nhan label vao do thi";
+	cout << "\n4. Xuat thong tin cua mot dinh trong do thi";
+	cout << "\n5. Kiem tra hai dinh u, v co ke nhau (co canh noi giua chung) hay khong?";
+	cout << "\n6. Them mot canh co trong so w noi 2 dinh u, v vao do thi";
+	cout << "\n7. Luu thong tin do thi xuong file";
+	cout << "\n8. Duyet do thi theo chieu rong";
+	cout << "\n9. Duyet do thi theo chieu sau dung de quy";
+	cout << "\n10. Duyet do thi theo chieu sau dung vong lap";
+	cout << "\n\n11. Tim cay bao trum toi thieu bang thuat toan Prim";
+	cout << "\n12. Tim cay bao trum toi thieu bang thuat toan Kruskal";
 	cout << "\n==============================================================";
 }
 
@@ -39,9 +39,11 @@ void XuLyMenu(int menu, Graph &g)
 	LabelType l;
 	int p1, p2;
 	char u, v;
+	VertexPtr V;
 	int w;
 	char filename[10] = "Text_.txt";
-	Path tree[MAX];
+	Path tree1[MAX];
+	Edge tree2[MAX];
 	//Xử lý chức năng
 	system("cls");
 	switch (menu)
@@ -57,45 +59,55 @@ void XuLyMenu(int menu, Graph &g)
 			cin >> stt;
 		} while (stt < 1 || stt > 6);
 		filename[4] = 'A' + stt - 1;
-		if (OpenGraph(g, filename))
-		{
-			cout << "\nMa tran ke: ";
-			DisplayMatrix(g);
-		}
-		else cout << "\nLoi mo file!";
+		if (!OpenGraph(g, filename))
+			cout << "\nLoi mo file!";
+		else cout << "\nThanh cong!";
 		break;
 	case 2:
+		cout << "\n3. Xuat ma tran ke ra man hinh\n";
+		cout << "\nMa tran ke: ";
+		DisplayMatrix(g);
+		break;
+	case 3:
 		cout << "\n2. Them mot dinh co nhan label vao do thi\n";
 		cout << "\nNhap ten dinh can them: ";
 		cin >> l;
 		cout << "\nMa tran ban dau:";
 		DisplayMatrix(g);
-		AddVertex(g, l);
+		V = CreateVertex(l);
+		AddVertex(g, V);
 		cout << "\nMa tran moi:";
 		DisplayMatrix(g);
 		break;
-	case 3:
-		cout << "\n3. Xuat thong tin cua mot dinh trong do thi\n";
-		cout << "\nNhap ten dinh can xem: ";
-		cin >> u;
-		p1 = FindIndexOfVertex(g, u);
-		if (p1 != -1)
-			DisplayInfoVertex(g, p1);
-		else cout << "\nKhong ton tai dinh co nhan la " << u;
-		break;
 	case 4:
+		cout << "\n3. Xuat thong tin cua mot dinh trong do thi\n";
+		do
+		{
+			cout << "\nNhap ten dinh can xem: ";
+			cin >> u;
+			p1 = FindIndexOfVertex(g, u);
+		} while (p1 == -1);
+		Xuat1Dinh(g, u);
+		break;
+	case 5:
 		cout << "\n4. Kiem tra hai dinh u, v co ke nhau (co canh noi giua chung) hay khong?\n";
-		cout << "\nNhap dinh u : ";
-		cin >> u;
-		cout << "\nNhap dinh v : ";
-		cin >> v;
-		p1 = FindIndexOfVertex(g, u);
-		p2 = FindIndexOfVertex(g, v);
-		if (IsConnected(g, p1, p2))
+		do
+		{
+			cout << "\nNhap dinh u : ";
+			cin >> u;
+			p1 = FindIndexOfVertex(g, u);
+		} while (p1 == -1);
+		do
+		{
+			cout << "\nNhap dinh v : ";
+			cin >> v;
+			p2 = FindIndexOfVertex(g, v);
+		} while (p2 == -1);
+		if (IsConnected(g, u, v))
 			cout << "\nHai dinh " << u << " va " << v << " ke nhau";
 		else cout << "\nHai dinh " << u << " va " << v << " khong ke nhau";
 		break;
-	case 5:
+	case 6:
 		cout << "\n5. Them mot canh co trong so w noi 2 dinh u, v vao do thi\n";
 		do
 		{
@@ -116,15 +128,15 @@ void XuLyMenu(int menu, Graph &g)
 		} while (w < 1);
 		cout << "\nDanh sach ban dau:";
 		DisplayMatrix(g);
-		AddEdge(g, p1, p2, w);
+		AddEdge(g, u, v, w);
 		cout << "\nDanh sach moi:";
 		DisplayMatrix(g);
 		break;
-	case 6:
+	case 7:
 		cout << "\n6. Luu thong tin do thi xuong file\n";
 		SaveGraph(g, "Output.txt");
 		break;
-	case 7:
+	case 8:
 		cout << "\n7. Duyet do thi theo chieu rong\n";
 		do
 		{
@@ -132,29 +144,40 @@ void XuLyMenu(int menu, Graph &g)
 			cin >> u;
 			p1 = FindIndexOfVertex(g, u);
 		} while (p1 == -1);
-		BFS(g, p1);
+		BFS(g, u);
 		break;
-	case 8:
-		cout << "\n8. Duyet do thi theo chieu sau\n";
+	case 9:
+		cout << "\n9. Duyet do thi theo chieu sau dung de quy\n";
 		do
 		{
 			cout << "\nNhap ten dinh bat dau : ";
 			cin >> u;
 			p1 = FindIndexOfVertex(g, u);
 		} while (p1 == -1);
-		DFS_Loop(g, p1);
-		/*ResetFlags(g);
-		DFS_Recursion(g, p1);*/
-		break;
-	case 9:
-		cout << "\n9. Tim cay bao trum toi thieu bang thuat toan Prim\n";
-		Prim(g, tree);
-		PrintPrimMST(g, tree);
+		ResetFlags(g);
+		DFS_Recursion(g, u);
 		break;
 	case 10:
-		cout << "\n10. Tim cay bao trum toi thieu bang thuat toan Kruskal\n";
-		Prim(g, tree);
-		PrintPrimMST(g, tree);
+		cout << "\n10. Duyet do thi theo chieu sau dung vong lap\n";
+		do
+		{
+			cout << "\nNhap ten dinh bat dau : ";
+			cin >> u;
+			p1 = FindIndexOfVertex(g, u);
+		} while (p1 == -1);
+		DFS_Loop(g, u);
+		break;
+	case 11:
+		cout << "\n11. Tim cay bao trum toi thieu bang thuat toan Prim\n";
+		ResetFlags(g);
+		Prim(g, tree1);
+		PrintPrimMST(g, tree1);
+		break;
+	case 12:
+		cout << "\n12. Tim cay bao trum toi thieu bang thuat toan Kruskal\n";
+		ResetFlags(g);
+		Kruskal(g, tree2);
+		PrintKruskalMST(g, tree2);
 		break;
 	default:
 		break;

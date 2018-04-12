@@ -264,9 +264,10 @@ void Prim(Graph g, Path tree[MAX])
 	int minVertex;		//Lưu đỉnh cuối của cạnh đó
 	for (size_t i = 1; i < g.numVertices; i++)		//Tìm n-1 cạnh cho cây
 	{
+		/*min = tree[i].length;*/
 		min = INF;
 		minVertex = 1;
-		for (size_t j = 2; j < g.numVertices; j++)	//Tìm cạnh min
+		for (size_t j = 1; j < g.numVertices; j++)	//Tìm cạnh min
 			if (g.Vertices[j].visited == NO && tree[j].length < min)
 			{
 				min = tree[j].length;
@@ -290,39 +291,104 @@ void PrintPrimMST(Graph g, Path tree[MAX])
 	for (size_t i = 1; i < g.numVertices; i++)
 	{
 		sum += tree[i].length;
-		cout << endl << '|' << setw(10) << g.Vertices[i].label << '|' << setw(10) << g.Vertices[tree[i].parent].label << '|' << setw(10) << tree[i].length << '|';
+		cout << endl << '|' << setw(10) << g.Vertices[tree[i].parent].label << '|' << setw(10) << g.Vertices[i].label << '|' << setw(10) << tree[i].length << '|';
 	}
 	cout << "\nCay bao trum ngan nhat co chieu dai: " << sum;
 }
 
 //==========================Kruskal===============================
 
-//int AdjMatrix2EdgeList(Graph g, Edge edgeList[UPPER])
-//{
-//
-//}
-
-void QuickSortEdges(Edge edgeList[MAX], int d, int c)
+//Lấy ra danh sách cạnh
+int AdjMatrix2EdgeList(Graph g, Edge edgeList[UPPER])
 {
-
+	int count = 0;
+	for (size_t i = 1; i < g.numVertices; i++)
+		for (size_t j = 0; j < i; j++)
+			if (g.cost[i][j]!=0 && g.cost[i][j]!=1000)
+			{
+				Edge v;
+				v.source = i;
+				v.target = j;
+				v.weight = g.cost[i][j];
+				v.marked = NO;
+				edgeList[count] = v;
+				count++;
+			}
+	return count;
 }
 
-//int Find(int leader[MAX], int x)
-//{
-//
-//}
+//Sắp xếp danh sách cạnh
+void QuickSortEdges(Edge edgeList[MAX], int d, int c)
+{
+	int i = d, j = c;
+	CostType mid = edgeList[(d + c) / 2].weight;
+	while (i <= j)
+	{
+		while (edgeList[i].weight < mid)i++;
+		while (edgeList[j].weight > mid)j--;
+		if (i <= j)
+		{
+			swap(edgeList[i], edgeList[j]);
+			i++;
+			j--;
+		}
+	}
+	if (i < c)QuickSortEdges(edgeList, i, c);
+	if (d < j)QuickSortEdges(edgeList, d, j);
+}
 
+//Tìm nút gốc của cây chứa đỉnh x
+int Find(int leader[MAX], int x)
+{
+	while (x != leader[x])x = leader[x];
+	return x;
+}
+
+//Hợp 2 cây bằng cách nối thêm cạnh e
 bool Union(int leader[MAX], Edge e)
 {
-
+	int x = Find(leader, e.source);
+	int y = Find(leader, e.target);
+	if (x == y)			//Nếu trùng gốc
+		return false;
+	else if (x < y)		//Nhập cây y vào cây x
+		leader[y] = x;
+	else leader[x] = y;
+	return true;
 }
 
 void Kruskal(Graph g, Edge tree[UPPER])
 {
-
+	int ne = AdjMatrix2EdgeList(g, tree);
+	QuickSortEdges(tree, 0, ne - 1);
+	int leader[MAX];
+	for (size_t i = 0; i < g.numVertices + 1; i++)	//Khởi tạo đỉnh gốc của cây con
+		leader[i] = i;
+	int count = 0;
+	for (size_t i = 0; i < ne; i++)
+	{
+		if (Union(leader, tree[i]))			//Nếu ghép được vào cây bao trùm
+		{
+			tree[i].marked = YES;
+			count++;
+			if (count == g.numVertices - 1)	//Nếu đủ n-1 cạnh
+				break;
+		}
+	}
 }
 
 void PrintKruskalMST(Graph g, Edge tree[UPPER])
 {
-
+	cout << endl << "Cay bao trum gom cac canh sau: ";
+	CostType sum = 0;
+	cout << endl << '|' << setw(10) << "Dinh Dau" << '|' << setw(10) << "Dinh Cuoi" << '|' << setw(10) << "Trong so" << '|';
+	for (size_t i = 0; i < g.numVertices; i++)
+	{
+		if (tree[i].marked == YES)
+		{
+			cout << endl << '|' << setw(10) << g.Vertices[tree[i].source].label << '|' << setw(10) << g.Vertices[tree[i].target].label << '|' << setw(10) << tree[i].weight << '|';
+			sum += tree[i].weight;
+		}
+	}
+	cout << endl << "Tong chieu dai cay bao trum la " << sum;
 }

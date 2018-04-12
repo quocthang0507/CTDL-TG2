@@ -2,7 +2,6 @@
 #include <conio.h>
 #include <fstream>
 #include <string.h>
-#include <iomanip>
 #include <stack>
 #include <queue>
 
@@ -22,7 +21,7 @@ int main()
 void ChayChuongTrinh()
 {
 	Graph g;
-	int menu, soMenu = 10;
+	int menu, soMenu = 8;
 	do
 	{
 		menu = ChonMenu(soMenu);

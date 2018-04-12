@@ -18,26 +18,10 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="TextA.txt" />
-    <Text Include="TextB.txt" />
-    <Text Include="TextC.txt" />
-    <Text Include="TextD.txt" />
-    <Text Include="TextE.txt" />
-    <Text Include="TextF.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Program.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Common.h" />
-    <ClInclude Include="Graph.h" />
-    <ClInclude Include="Menu.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E0F56F27-EAC4-4F95-BB9C-08D19FF5A76D}</ProjectGuid>
+    <ProjectGuid>{47ACBA12-55CC-43DF-90AC-72827AAD8660}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>BaiToanTrenDoThi</RootNamespace>
+    <RootNamespace>DanhSachKe</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -161,6 +145,23 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Program.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="Graph.h" />
+    <ClInclude Include="Menu.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Output.txt" />
+    <Text Include="TextA.txt" />
+    <Text Include="TextB.txt" />
+    <Text Include="TextC.txt" />
+    <Text Include="TextD.txt" />
+    <Text Include="TextE.txt" />
+    <Text Include="TextF.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
