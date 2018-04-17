@@ -3,17 +3,10 @@
 	cout << "\n===================== HE THONG CHUC NANG =====================";
 	cout << "\n0. Thoat khoi chuong trinh";
 	cout << "\n1. Doc du lieu tu tap tin";
-	cout << "\n2. Xuat ma tran ke ra man hinh";
-	cout << "\n3. Them mot dinh co nhan label vao do thi";
-	cout << "\n4. Xuat thong tin cua mot dinh trong do thi";
-	cout << "\n5. Kiem tra hai dinh u, v co ke nhau (co canh noi giua chung) hay khong?";
-	cout << "\n6. Them mot canh co trong so w noi 2 dinh u, v vao do thi";
-	cout << "\n7. Luu thong tin do thi xuong file";
-	cout << "\n8. Duyet do thi theo chieu rong";
-	cout << "\n9. Duyet do thi theo chieu sau dung de quy";
-	cout << "\n10. Duyet do thi theo chieu sau dung vong lap";
-	cout << "\n\n11. Tim cay bao trum toi thieu bang thuat toan Prim";
-	cout << "\n12. Tim cay bao trum toi thieu bang thuat toan Kruskal";
+	cout << "\n2. Tim cay bao trum toi thieu bang thuat toan Prim";
+	cout << "\n3. Tim cay bao trum toi thieu bang thuat toan Kruskal";
+	cout << "\n4. Tim duong di ngan nhat tu 1 dinh den cac dinh con lai bang thuat toan Dijkstra";
+	cout << "\n5. Tim duong di ngan nhat giua moi cap dinh bang thuat toan Floyd";
 	cout << "\n==============================================================";
 }
 
@@ -61,123 +54,55 @@ void XuLyMenu(int menu, Graph &g)
 		filename[4] = 'A' + stt - 1;
 		if (!OpenGraph(g, filename))
 			cout << "\nLoi mo file!";
-		else cout << "\nThanh cong!";
+		else DisplayMatrix(g);
 		break;
 	case 2:
-		cout << "\n3. Xuat ma tran ke ra man hinh\n";
-		cout << "\nMa tran ke: ";
-		DisplayMatrix(g);
-		break;
-	case 3:
-		cout << "\n2. Them mot dinh co nhan label vao do thi\n";
-		cout << "\nNhap ten dinh can them: ";
-		cin >> l;
-		cout << "\nMa tran ban dau:";
-		DisplayMatrix(g);
-		V = CreateVertex(l);
-		AddVertex(g, V);
-		cout << "\nMa tran moi:";
-		DisplayMatrix(g);
-		break;
-	case 4:
-		cout << "\n3. Xuat thong tin cua mot dinh trong do thi\n";
-		do
-		{
-			cout << "\nNhap ten dinh can xem: ";
-			cin >> u;
-			p1 = FindIndexOfVertex(g, u);
-		} while (p1 == -1);
-		Xuat1Dinh(g, u);
-		break;
-	case 5:
-		cout << "\n4. Kiem tra hai dinh u, v co ke nhau (co canh noi giua chung) hay khong?\n";
-		do
-		{
-			cout << "\nNhap dinh u : ";
-			cin >> u;
-			p1 = FindIndexOfVertex(g, u);
-		} while (p1 == -1);
-		do
-		{
-			cout << "\nNhap dinh v : ";
-			cin >> v;
-			p2 = FindIndexOfVertex(g, v);
-		} while (p2 == -1);
-		if (IsConnected(g, u, v))
-			cout << "\nHai dinh " << u << " va " << v << " ke nhau";
-		else cout << "\nHai dinh " << u << " va " << v << " khong ke nhau";
-		break;
-	case 6:
-		cout << "\n5. Them mot canh co trong so w noi 2 dinh u, v vao do thi\n";
-		do
-		{
-			cout << "\nNhap dinh u : ";
-			cin >> u;
-			p1 = FindIndexOfVertex(g, u);
-		} while (p1 == -1);
-		do
-		{
-			cout << "\nNhap dinh v : ";
-			cin >> v;
-			p2 = FindIndexOfVertex(g, v);
-		} while (p2 == -1);
-		do
-		{
-			cout << "\nNhap trong so w : ";
-			cin >> w;
-		} while (w < 1);
-		cout << "\nDanh sach ban dau:";
-		DisplayMatrix(g);
-		AddEdge(g, u, v, w);
-		cout << "\nDanh sach moi:";
-		DisplayMatrix(g);
-		break;
-	case 7:
-		cout << "\n6. Luu thong tin do thi xuong file\n";
-		SaveGraph(g, "Output.txt");
-		break;
-	case 8:
-		cout << "\n7. Duyet do thi theo chieu rong\n";
-		do
-		{
-			cout << "\nNhap ten dinh bat dau : ";
-			cin >> u;
-			p1 = FindIndexOfVertex(g, u);
-		} while (p1 == -1);
-		BFS(g, u);
-		break;
-	case 9:
-		cout << "\n9. Duyet do thi theo chieu sau dung de quy\n";
-		do
-		{
-			cout << "\nNhap ten dinh bat dau : ";
-			cin >> u;
-			p1 = FindIndexOfVertex(g, u);
-		} while (p1 == -1);
-		ResetFlags(g);
-		DFS_Recursion(g, u);
-		break;
-	case 10:
-		cout << "\n10. Duyet do thi theo chieu sau dung vong lap\n";
-		do
-		{
-			cout << "\nNhap ten dinh bat dau : ";
-			cin >> u;
-			p1 = FindIndexOfVertex(g, u);
-		} while (p1 == -1);
-		DFS_Loop(g, u);
-		break;
-	case 11:
 		cout << "\n11. Tim cay bao trum toi thieu bang thuat toan Prim\n";
 		ResetFlags(g);
 		Prim(g, tree1);
 		PrintPrimMST(g, tree1);
 		break;
-	case 12:
+	case 3:
 		cout << "\n12. Tim cay bao trum toi thieu bang thuat toan Kruskal\n";
 		ResetFlags(g);
 		Kruskal(g, tree2);
 		PrintKruskalMST(g, tree2);
+		break;
+	case 4:
+		cout << "\n4. Tim duong di ngan nhat tu 1 dinh den cac dinh con lai bang thuat toan Dijkstra\n";
+		do
+		{
+			cout << "\nNhap ten dinh bat dau: ";
+			cin >> u;
+			p1 = FindIndexOfVertex(g, u);
+		} while (p1 == -1);
+		//Dijkstra(g, p1, road);
+		do
+		{
+			cout << "\nNhap ten dinh ket thuc: ";
+			cin >> v;
+			p2 = FindIndexOfVertex(g, v);
+		} while (p2 == -1);
+		cout << "\nQuang duong can di la: ";
+		//PrintPath_Dijkstra(g, road, p2);
+		break;
+	case 5:
+		cout << "\n5. Tim duong di ngan nhat giua moi cap dinh bang thuat toan Floyd\n";
+		//Floyd(g, route);
+		do
+		{
+			cout << "\nNhap ten dinh bat dau: ";
+			cin >> u;
+			p1 = FindIndexOfVertex(g, u);
+		} while (p1 == -1);
+		do
+		{
+			cout << "\nNhap ten dinh ket thuc: ";
+			cin >> v;
+			p2 = FindIndexOfVertex(g, v);
+		} while (p2 == -1);
+		cout << "\nQuang duong can di la: ";
+		//PrintPath_Floyd(g, route, p1, p2);
 		break;
 	default:
 		break;

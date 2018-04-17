@@ -123,24 +123,6 @@ void AddEdge(Graph &g, int start, int end)
 	AddEdge(g, start, end, 1);
 }
 
-//Lưu đồ thị vào tập tin
-void SaveGraph(Graph g, char *filename)
-{
-	ofstream os(filename);
-	os << g.numVertices << '\n';
-	os << g.numEdges << '\n';
-	os << g.directed << '\n';
-	for (size_t i = 0; i < g.numVertices; i++)	//Lưu tên các đỉnh
-		os << g.Vertices[i].label << '\n';
-	for (size_t i = 0; i < g.numVertices; i++)	//Lưu ma trận kề
-	{
-		for (size_t j = 0; j < g.numVertices; j++)
-			os << g.cost[i][j] << '\t';
-		os << '\n';
-	}
-	os.close();
-}
-
 //Đọc dữ liệu từ tập tin
 int OpenGraph(Graph &g, char *filename)
 {
@@ -173,82 +155,6 @@ int OpenGraph(Graph &g, char *filename)
 	}
 	else
 		return 0;
-}
-
-//Tìm đỉnh kề với curr mà chưa xét
-int FindFirstAdjacentVertex(Graph g, int curr)
-{
-	for (size_t i = 0; i < g.numVertices; i++)
-		if (g.Vertices[i].visited == NO && IsConnected(g, curr, i) == 1)
-			return i;
-	return NULLDATA;
-}
-
-//Duyệt đồ thị theo chiều sau (Depth First Search)
-//Mô tả: Đi tiếp đến khi nào không đi đến được nữa thì lùi lại và tìm đường đi mới, và một đỉnh không đi qua 2 lần
-void DFS_Recursion(Graph &g, int start)
-{
-	g.Vertices[start].visited = YES;
-	DisplayVertex(g, start);
-	while (true)
-	{
-		int t = FindFirstAdjacentVertex(g, start);
-		if (t == NULLDATA)
-			break;
-		else
-			DFS_Recursion(g, t);
-	}
-}
-
-void DFS_Loop(Graph &g, int start)
-{
-	ResetFlags(g);
-	g.Vertices[start].visited = YES;
-	DisplayVertex(g, start);
-	stack<int>s;
-	s.push(start);
-	int curr, adj;
-	while (!s.empty())
-	{
-		curr = s.top();
-		adj = FindFirstAdjacentVertex(g, curr);
-		if (adj == NULLDATA)
-			s.pop();
-		else
-		{
-			g.Vertices[adj].visited = YES;
-			DisplayVertex(g, adj);
-			s.push(adj);
-		}
-	}
-}
-
-//Duyệt đồ thị theo chiều rộng (Breadth First Search)
-//Mô tả: Đi từ gốc, sau đó đi tới các đỉnh kề với đỉnh gốc và tiếp tục đi tới các đỉnh kề với các đỉnh đã xét
-void BFS(Graph g, int start)
-{
-	ResetFlags(g);
-	g.Vertices[start].visited = YES;
-	queue<int>q;
-	q.push(start);
-	int curr, adj;
-	while (!q.empty())
-	{
-		curr = q.front();
-		q.pop();
-		DisplayVertex(g, curr);
-		while (true)
-		{
-			adj = FindFirstAdjacentVertex(g, curr);
-			if (adj == NULLDATA)
-				break;
-			else
-			{
-				g.Vertices[adj].visited = YES;
-				q.push(adj);
-			}
-		}
-	}
 }
 
 //==========================PRIM===============================
@@ -304,7 +210,7 @@ int AdjMatrix2EdgeList(Graph g, Edge edgeList[UPPER])
 	int count = 0;
 	for (size_t i = 1; i < g.numVertices; i++)
 		for (size_t j = 0; j < i; j++)
-			if (g.cost[i][j]!=0 && g.cost[i][j]!=1000)
+			if (g.cost[i][j] != 0 && g.cost[i][j] != 1000)
 			{
 				Edge v;
 				v.source = i;
@@ -391,4 +297,79 @@ void PrintKruskalMST(Graph g, Edge tree[UPPER])
 		}
 	}
 	cout << endl << "Tong chieu dai cay bao trum la " << sum;
+}
+
+//==========================Dijkstra===============================
+
+void Dijkstra(Graph g, int source, Path road[MAX])
+{
+	CostType min;
+	int counter, minVertex, curr;
+	for (size_t i = 0; i < g.numVertices; i++)	//Khởi tạo giá trị cho đường đi
+	{
+		road[i].length = g.cost[source][i];
+		road[i].parent = source;
+	}
+	g.Vertices[source].visited = YES;
+	//road[source].parent = 0;
+	counter = 1;
+	curr = source;
+	while (counter < g.numVertices - 1)
+	{
+		min = INF;
+		minVertex = curr;
+		for (size_t i = 0; i < g.numVertices; i++)
+		{
+			if (g.Vertices[i].visited == NO)
+			{
+				if (road[i].length > road[curr].length + g.cost[curr][i])
+				{
+					road[i].length = road[curr].length + g.cost[curr][i];
+					road[i].parent = curr;
+				}
+				if (min > road[i].length)
+				{
+					min = road[i].length;
+					minVertex = i;
+				}
+			}
+		}
+		curr = minVertex;
+		g.Vertices[curr].visited = YES;
+		counter++;
+	}
+}
+
+void PrintPath_Dijkstra(Graph g, Path road[MAX], int target)
+{
+	if (road[target].parent != target)
+		PrintPath_Dijkstra(g, road, road[target].parent);
+	cout << '\t' << g.Vertices[target].label;
+}
+
+//==========================Floyd===============================
+
+void Floyd(Graph g, Path route[MAX][MAX])
+{
+	for (size_t i = 0; i < g.numVertices; i++)
+		for (size_t j = 0; j < g.numVertices; j++)
+		{
+			route[i][j].length = g.cost[i][j];
+			route[i][j].parent = i;
+		}
+	for (size_t k = 0; k < g.numVertices; k++)
+		for (size_t i = 0; i < g.numVertices; i++)
+			for (size_t j = 0; j < g.numVertices; j++)
+				if (route[i][j].length > route[i][k].length + route[k][j].length)
+				{
+					route[i][j].length = route[i][k].length + route[k][j].length;
+					route[i][j].parent = route[k][j].parent;
+				}
+}
+
+void PrintPath_Floyd(Graph g, Path route[MAX][MAX], int source, int target)
+{
+	if (route[source][target].parent != target)
+		PrintPath_Floyd(g, route, source, route[source][target].parent);
+	cout << '\t' << g.Vertices[target].label;
 }

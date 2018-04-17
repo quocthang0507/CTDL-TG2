@@ -136,32 +136,6 @@ void AddEdge(Graph &g, char v, char lab, CostType w)
 	}
 }
 
-//Lưu đồ thị vào tập tin
-void SaveGraph(Graph g, char *filename)
-{
-	ofstream out(filename);
-	out << g.numVertices << '\n';
-	out << g.numEdges << '\n';
-	out << g.directed << '\n';
-	for (size_t i = 0; i < g.numVertices; i++)	//Ghi tên các đỉnh
-		out << g.Vertices[i]->label << '\t';
-	out << endl;
-	for (size_t i = 0; i < g.numVertices; i++)	//Ghi ma trận kề
-	{
-		for (size_t j = 0; j < g.numVertices; j++)
-		{
-			EdgePtr e = FindEdge(g, g.Vertices[i]->label, g.Vertices[j]->label);
-			if (e == NULL)
-			if (i == j)
-				out << 0 << '\t';
-			else out << 1000 << '\t';
-			else out << e->weight << '\t';
-		}
-		out << endl;
-	}
-	out.close();
-}
-
 //Đọc dữ liệu từ tập tin
 int OpenGraph(Graph &g, char *filename)
 {
@@ -199,98 +173,6 @@ int OpenGraph(Graph &g, char *filename)
 	}
 	else
 		return 0;
-}
-
-//Tìm đỉnh kề với curr mà chưa xét
-char FindFirstAdjacentVertex(Graph g, char cur)
-{
-	int v = FindIndexOfVertex(g, cur);
-	if (v != -1)
-	{
-		EdgePtr e = g.Vertices[v]->EdgeList;
-		while (e != NULL)
-		{
-			for (size_t j = 0; j < g.numVertices; j++)
-			if (g.Vertices[j]->label == e->target && g.Vertices[j]->visited == NO)
-				return e->target;
-			e = e->Next;
-		}
-	}
-	return NULLDATA;
-}
-
-//Duyệt đồ thị theo chiều sau (Depth First Search)
-//Mô tả: Đi tiếp đến khi nào không đi đến được nữa thì lùi lại và tìm đường đi mới, và một đỉnh không đi qua 2 lần
-void DFS_Recursion(Graph &g, char start)
-{
-	int vt = FindIndexOfVertex(g, start);
-	g.Vertices[vt]->visited = YES;
-	cout << start << '\t';
-	while (true)
-	{
-		char t = FindFirstAdjacentVertex(g, start);
-		if (t == NULLDATA)
-			break;
-		else
-			DFS_Recursion(g, t);
-	}
-}
-
-void DFS_Loop(Graph &g, char start)
-{
-	ResetFlags(g);
-	int vt = FindIndexOfVertex(g, start);
-	g.Vertices[vt]->visited = YES;
-	cout << start << '\t';
-	stack<char>s;
-	s.push(start);
-	char curr, adj;
-	while (!s.empty())
-	{
-		curr = s.top();
-		adj = FindFirstAdjacentVertex(g, curr);
-		if (adj == NULLDATA)
-			s.pop();
-		else
-		{
-			vt = FindIndexOfVertex(g, adj);
-			g.Vertices[vt]->visited = YES;
-			cout << adj << '\t';
-			s.push(adj);
-		}
-	}
-}
-
-//Duyệt đồ thị theo chiều rộng (Breadth First Search)
-//Mô tả: Đi từ gốc, sau đó đi tới các đỉnh kề với đỉnh gốc và tiếp tục đi tới các đỉnh kề với các đỉnh đã xét
-void BFS(Graph g, char start)
-{
-	ResetFlags(g);
-	int vt = FindIndexOfVertex(g, start);
-	g.Vertices[vt]->visited = YES;
-	cout << start << '\t';
-	queue<int>q;
-	q.push(start);
-	char cur, adj;
-	cur = q.front();
-	while (!q.empty())
-	{
-		adj = FindFirstAdjacentVertex(g, cur);
-		if (adj == NULLDATA)
-		{
-			q.pop();
-			if (q.size() != 0)
-				cur = q.front();
-			else break;
-		}
-		else
-		{
-			vt = FindIndexOfVertex(g, adj);
-			g.Vertices[vt]->visited = YES;
-			cout << adj << '\t';
-			q.push(adj);
-		}
-	}
 }
 
 //Hiển thị ma trận kề
