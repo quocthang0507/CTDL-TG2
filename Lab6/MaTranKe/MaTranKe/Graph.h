@@ -299,19 +299,19 @@ void PrintKruskalMST(Graph g, Edge tree[UPPER])
 	cout << endl << "Tong chieu dai cay bao trum la " << sum;
 }
 
-//==========================Dijkstra===============================
+//===============================Dijkstra===============================
 
+//Thuật toán Dijkstra
 void Dijkstra(Graph g, int source, Path road[MAX])
 {
 	CostType min;
 	int counter, minVertex, curr;
-	for (size_t i = 0; i < g.numVertices; i++)	//Khởi tạo giá trị cho đường đi
+	for (size_t i = 0; i < g.numVertices; i++)
 	{
 		road[i].length = g.cost[source][i];
 		road[i].parent = source;
 	}
 	g.Vertices[source].visited = YES;
-	//road[source].parent = 0;
 	counter = 1;
 	curr = source;
 	while (counter < g.numVertices - 1)
@@ -340,6 +340,7 @@ void Dijkstra(Graph g, int source, Path road[MAX])
 	}
 }
 
+//In đoạn đường từ đỉnh đó đến đỉnh target
 void PrintPath_Dijkstra(Graph g, Path road[MAX], int target)
 {
 	if (road[target].parent != target)
@@ -347,29 +348,66 @@ void PrintPath_Dijkstra(Graph g, Path road[MAX], int target)
 	cout << '\t' << g.Vertices[target].label;
 }
 
-//==========================Floyd===============================
+//In các đoạn đường đến các đỉnh
+void PrintAllPath_Dijkstra(Graph g, int start)
+{
+	Path road[MAX];
+	Dijkstra(g, start, road);
+	for (size_t i = 0; i < g.numVertices; i++)
+	{
+		if (road[i].length == INF)
+			cout << "\nKhong co duong di tu " << g.Vertices[start].label << " den " << g.Vertices[i].label;
+		else if (i != start)
+		{
+			cout << "\nDoan duong tu " << g.Vertices[start].label << " den " << g.Vertices[i].label << " la : ";
+			PrintPath_Dijkstra(g, road, i);
+			cout << "\t(Tong do dai: " << road[i].length << ')';
+		}
+	}
+}
+
+//===============================Floyd===============================
 
 void Floyd(Graph g, Path route[MAX][MAX])
 {
 	for (size_t i = 0; i < g.numVertices; i++)
-		for (size_t j = 0; j < g.numVertices; j++)
-		{
-			route[i][j].length = g.cost[i][j];
-			route[i][j].parent = i;
-		}
+	for (size_t j = 0; j < g.numVertices; j++)
+	{
+		route[i][j].length = g.cost[i][j];
+		route[i][j].parent = i;
+	}
 	for (size_t k = 0; k < g.numVertices; k++)
-		for (size_t i = 0; i < g.numVertices; i++)
-			for (size_t j = 0; j < g.numVertices; j++)
-				if (route[i][j].length > route[i][k].length + route[k][j].length)
-				{
-					route[i][j].length = route[i][k].length + route[k][j].length;
-					route[i][j].parent = route[k][j].parent;
-				}
+	for (size_t i = 0; i < g.numVertices; i++)
+	for (size_t j = 0; j < g.numVertices; j++)
+	if (route[i][j].length > route[i][k].length + route[k][j].length)
+	{
+		route[i][j].length = route[i][k].length + route[k][j].length;
+		route[i][j].parent = route[k][j].parent;
+	}
 }
 
 void PrintPath_Floyd(Graph g, Path route[MAX][MAX], int source, int target)
 {
 	if (route[source][target].parent != target)
+	{
 		PrintPath_Floyd(g, route, source, route[source][target].parent);
-	cout << '\t' << g.Vertices[target].label;
+		cout << '\t' << g.Vertices[target].label;
+	}
+}
+
+void PrintAllPath_Floyd(Graph g)
+{
+	Path route[MAX][MAX];
+	Floyd(g, route);
+	for (size_t i = 0; i < g.numVertices; i++, cout << endl)
+	for (size_t j = 0; j < g.numVertices; j++)
+	{
+		if (route[i][j].length == INF)
+			cout << "\nKhong co duong di tu dinh " << g.Vertices[i].label << " den dinh " << g.Vertices[j].label;
+		else if (i != j)
+		{
+			cout << "\nDoan duong tu dinh " << g.Vertices[i].label << " den dinh " << g.Vertices[j].label << " la: ";
+			PrintPath_Floyd(g, route, i, j);
+		}
+	}
 }

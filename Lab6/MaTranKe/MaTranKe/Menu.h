@@ -18,7 +18,11 @@ int ChonMenu(int soMenu)
 		system("cls");
 		XuatMenu();
 		cout << "\nNhap 1 so trong khoang tu [0,..," << soMenu << "] de chon chuc nang, stt = ";
-		cin >> stt;
+		if (!(cin >> stt))
+		{
+			cin.clear(); // xóa cờ lỗi của cin
+			fflush(stdin); // xóa toàn bộ bộ nhớ đệm, chuẩn bị cho lần nhập kế tiếp
+		}
 		if (0 <= stt && stt <= soMenu)
 			break;
 	}
@@ -77,33 +81,12 @@ void XuLyMenu(int menu, Graph &g)
 			cin >> u;
 			p1 = FindIndexOfVertex(g, u);
 		} while (p1 == -1);
-		Dijkstra(g, p1, road);
-		do
-		{
-			cout << "\nNhap ten dinh ket thuc: ";
-			cin >> v;
-			p2 = FindIndexOfVertex(g, v);
-		} while (p2 == -1);
-		cout << "\nQuang duong can di la: ";
-		PrintPath_Dijkstra(g, road, p2);
+		PrintAllPath_Dijkstra(g, p1);
 		break;
 	case 5:
 		cout << "\n5. Tim duong di ngan nhat giua moi cap dinh bang thuat toan Floyd\n";
 		Floyd(g, route);
-		do
-		{
-			cout << "\nNhap ten dinh bat dau: ";
-			cin >> u;
-			p1 = FindIndexOfVertex(g, u);
-		} while (p1 == -1);
-		do
-		{
-			cout << "\nNhap ten dinh ket thuc: ";
-			cin >> v;
-			p2 = FindIndexOfVertex(g, v);
-		} while (p2 == -1);
-		cout << "\nQuang duong can di la: ";
-		PrintPath_Floyd(g, route, p1, p2);
+		PrintAllPath_Floyd(g);
 		break;
 	default:
 		break;

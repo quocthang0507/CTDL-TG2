@@ -18,25 +18,27 @@ int ChonMenu(int soMenu)
 		system("cls");
 		XuatMenu();
 		cout << "\nNhap 1 so trong khoang tu [0,..," << soMenu << "] de chon chuc nang, stt = ";
-		cin >> stt;
+		if (!(cin >> stt))
+		{
+			cin.clear(); // xóa cờ lỗi của cin
+			fflush(stdin); // xóa toàn bộ bộ nhớ đệm, chuẩn bị cho lần nhập kế tiếp
+		}
 		if (0 <= stt && stt <= soMenu)
 			break;
 	}
 	return stt;
 }
 
-void XuLyMenu(int menu, Graph &g)
+void XuLyMenu(int menu, Graph &g, CostType cost[MAX][MAX])
 {
 	//Khai báo các biến phục vụ các chức năng
-	int stt;
-	LabelType l;
-	int p1, p2;
+	int stt, p1, p2;
 	char u, v;
-	VertexPtr V;
-	int w;
 	char filename[10] = "Text_.txt";
 	Path tree1[MAX];
 	Edge tree2[MAX];
+	Path road[MAX];
+	Path route[MAX][MAX];
 	//Xử lý chức năng
 	system("cls");
 	switch (menu)
@@ -52,20 +54,24 @@ void XuLyMenu(int menu, Graph &g)
 			cin >> stt;
 		} while (stt < 1 || stt > 6);
 		filename[4] = 'A' + stt - 1;
-		if (!OpenGraph(g, filename))
-			cout << "\nLoi mo file!";
-		else DisplayMatrix(g);
+		if (OpenGraph(g, filename))
+		{
+			cout << "\nMa tran ke: ";
+			DisplayMatrix(g);
+			EdgeList2CostMatrix(g, cost);
+		}
+		else cout << "\nLoi mo file!";
 		break;
 	case 2:
-		cout << "\n11. Tim cay bao trum toi thieu bang thuat toan Prim\n";
+		cout << "\n10. Tim cay bao trum toi thieu bang thuat toan Prim\n";
 		ResetFlags(g);
-		Prim(g, tree1);
+		Prim(g, tree1, cost);
 		PrintPrimMST(g, tree1);
 		break;
 	case 3:
-		cout << "\n12. Tim cay bao trum toi thieu bang thuat toan Kruskal\n";
+		cout << "\n11. Tim cay bao trum toi thieu bang thuat toan Kruskal\n";
 		ResetFlags(g);
-		Kruskal(g, tree2);
+		Kruskal(g, tree2, cost);
 		PrintKruskalMST(g, tree2);
 		break;
 	case 4:
@@ -76,33 +82,12 @@ void XuLyMenu(int menu, Graph &g)
 			cin >> u;
 			p1 = FindIndexOfVertex(g, u);
 		} while (p1 == -1);
-		//Dijkstra(g, p1, road);
-		do
-		{
-			cout << "\nNhap ten dinh ket thuc: ";
-			cin >> v;
-			p2 = FindIndexOfVertex(g, v);
-		} while (p2 == -1);
-		cout << "\nQuang duong can di la: ";
-		//PrintPath_Dijkstra(g, road, p2);
+		PrintAllPath_Dijkstra(g, p1, cost);
 		break;
 	case 5:
 		cout << "\n5. Tim duong di ngan nhat giua moi cap dinh bang thuat toan Floyd\n";
-		//Floyd(g, route);
-		do
-		{
-			cout << "\nNhap ten dinh bat dau: ";
-			cin >> u;
-			p1 = FindIndexOfVertex(g, u);
-		} while (p1 == -1);
-		do
-		{
-			cout << "\nNhap ten dinh ket thuc: ";
-			cin >> v;
-			p2 = FindIndexOfVertex(g, v);
-		} while (p2 == -1);
-		cout << "\nQuang duong can di la: ";
-		//PrintPath_Floyd(g, route, p1, p2);
+		Floyd(g, route, cost);
+		PrintAllPath_Floyd(g, cost);
 		break;
 	default:
 		break;
