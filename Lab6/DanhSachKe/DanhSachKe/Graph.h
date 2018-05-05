@@ -23,8 +23,8 @@ EdgePtr CreateEdge(char l, CostType w)
 int FindIndexOfVertex(Graph g, LabelType l)
 {
 	for (size_t i = 0; i < g.numVertices; i++)
-	if (g.Vertices[i]->label == l)
-		return i;
+		if (g.Vertices[i]->label == l)
+			return i;
 	return -1;
 }
 
@@ -188,9 +188,9 @@ void DisplayMatrix(Graph g)
 		{
 			EdgePtr e = FindEdge(g, g.Vertices[i]->label, g.Vertices[j]->label);
 			if (e == NULL)
-			if (i == j)
-				cout << "0" << '\t';
-			else cout << "INF" << '\t';
+				if (i == j)
+					cout << "0" << '\t';
+				else cout << "INF" << '\t';
 			else cout << e->weight << '\t';
 		}
 		cout << endl;
@@ -232,18 +232,18 @@ void Prim(Graph g, Path tree[MAX], int cost[MAX][MAX])
 		min = INF;
 		minVertex = 1;
 		for (size_t j = 1; j < g.numVertices; j++)	//Tìm cạnh min
-		if (g.Vertices[j]->visited == NO && tree[j].length < min)
-		{
-			min = tree[j].length;
-			minVertex = j;
-		}
+			if (g.Vertices[j]->visited == NO && tree[j].length < min)
+			{
+				min = tree[j].length;
+				minVertex = j;
+			}
 		g.Vertices[minVertex]->visited = YES;
-		for (size_t i = 0; i < g.numVertices; i++)	//Thêm vào cây
-		if (g.Vertices[i]->visited == NO && cost[minVertex][i] < tree[i].length)
-		{
-			tree[i].length = cost[minVertex][i];
-			tree[i].parent = minVertex;
-		}
+		for (size_t j = 0; j < g.numVertices; j++)	//Thêm vào cây
+			if (g.Vertices[j]->visited == NO && cost[minVertex][j] < tree[j].length)
+			{
+				tree[j].length = cost[minVertex][j];
+				tree[j].parent = minVertex;
+			}
 	}
 }
 
@@ -267,17 +267,17 @@ int AdjMatrix2EdgeList(Graph g, Edge edgeList[UPPER], int cost[MAX][MAX])
 {
 	int count = 0;
 	for (size_t i = 0; i < g.numVertices; i++)
-	for (size_t j = 0; j < i; j++)
-	if (cost[i][j] != 0 && cost[i][j] != 1000)
-	{
-		Edge v;
-		v.source = g.Vertices[i]->label;
-		v.target = g.Vertices[j]->label;
-		v.weight = cost[i][j];
-		v.marked = NO;
-		edgeList[count] = v;
-		count++;
-	}
+		for (size_t j = 0; j < i; j++)
+			if (cost[i][j] != 0 && cost[i][j] != 1000)
+			{
+				Edge v;
+				v.source = g.Vertices[i]->label;
+				v.target = g.Vertices[j]->label;
+				v.weight = cost[i][j];
+				v.marked = NO;
+				edgeList[count] = v;
+				count++;
+			}
 	return count;
 }
 
@@ -431,19 +431,19 @@ void PrintAllPath_Dijkstra(Graph g, int start, int cost[MAX][MAX])
 void Floyd(Graph g, Path route[MAX][MAX], int cost[MAX][MAX])
 {
 	for (size_t i = 0; i < g.numVertices; i++)
-	for (size_t j = 0; j < g.numVertices; j++)
-	{
-		route[i][j].length = cost[i][j];
-		route[i][j].parent = i;
-	}
+		for (size_t j = 0; j < g.numVertices; j++)
+		{
+			route[i][j].length = cost[i][j];
+			route[i][j].parent = i;
+		}
 	for (size_t k = 0; k < g.numVertices; k++)
-	for (size_t i = 0; i < g.numVertices; i++)
-	for (size_t j = 0; j < g.numVertices; j++)
-	if (route[i][j].length > route[i][k].length + route[k][j].length)
-	{
-		route[i][j].length = route[i][k].length + route[k][j].length;
-		route[i][j].parent = route[k][j].parent;
-	}
+		for (size_t i = 0; i < g.numVertices; i++)
+			for (size_t j = 0; j < g.numVertices; j++)
+				if (route[i][j].length > route[i][k].length + route[k][j].length)
+				{
+					route[i][j].length = route[i][k].length + route[k][j].length;
+					route[i][j].parent = route[k][j].parent;
+				}
 }
 
 void PrintPath_Floyd(Graph g, Path route[MAX][MAX], int source, int target)
@@ -460,14 +460,14 @@ void PrintAllPath_Floyd(Graph g, int cost[MAX][MAX])
 	Path route[MAX][MAX];
 	Floyd(g, route, cost);
 	for (size_t i = 0; i < g.numVertices; i++, cout << endl)
-	for (size_t j = 0; j < g.numVertices; j++)
-	{
-		if (route[i][j].length == INF)
-			cout << "\nKhong co duong di tu dinh " << g.Vertices[i]->label << " den dinh " << g.Vertices[j]->label;
-		else if (i != j)
+		for (size_t j = 0; j < g.numVertices; j++)
 		{
-			cout << "\nDoan duong tu dinh " << g.Vertices[i]->label << " den dinh " << g.Vertices[j]->label << " la: ";
-			PrintPath_Floyd(g, route, i, j);
+			if (route[i][j].length == INF)
+				cout << "\nKhong co duong di tu dinh " << g.Vertices[i]->label << " den dinh " << g.Vertices[j]->label;
+			else if (i != j)
+			{
+				cout << "\nDoan duong tu dinh " << g.Vertices[i]->label << " den dinh " << g.Vertices[j]->label << " la: ";
+				PrintPath_Floyd(g, route, i, j);
+			}
 		}
-	}
 }

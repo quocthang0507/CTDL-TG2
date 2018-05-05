@@ -32,12 +32,11 @@ int ChonMenu(int soMenu)
 void XuLyMenu(int menu, Graph &g)
 {
 	//Khai báo các biến phục vụ các chức năng
-	int stt, p1, p2;
-	char u, v;
+	int stt, p1;
+	char u;
 	char filename[10] = "Text_.txt";
 	Path tree1[MAX];
 	Edge tree2[MAX];
-	Path road[MAX];
 	Path route[MAX][MAX];
 	//Xử lý chức năng
 	system("cls");

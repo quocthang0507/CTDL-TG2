@@ -180,11 +180,11 @@ void Prim(Graph g, Path tree[MAX])
 				minVertex = j;
 			}
 		g.Vertices[minVertex].visited = YES;
-		for (size_t i = 0; i < g.numVertices; i++)	//Thêm vào cây
-			if (g.Vertices[i].visited == NO && g.cost[minVertex][i] < tree[i].length)
+		for (size_t j = 0; j < g.numVertices; j++)	//Thêm vào cây
+			if (g.Vertices[j].visited == NO && g.cost[minVertex][j] < tree[j].length)
 			{
-				tree[i].length = g.cost[minVertex][i];
-				tree[i].parent = minVertex;
+				tree[j].length = g.cost[minVertex][j];
+				tree[j].parent = minVertex;
 			}
 	}
 }
