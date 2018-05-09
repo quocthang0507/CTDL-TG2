@@ -4,21 +4,21 @@ typedef int MangKQ[MAX][MAX];
 
 void ChiaPhanThuong(MangKQ c, int m, int n)
 {
-	//Co i phan thuong ma chia cho 0 hoc sinh thi co 0 cach chia
+	//Có i phần thưởng mà chia cho 0 học sinh thì có 0 cách chia
 	for (size_t i = 1; i <= m; i++)
 		c[i][0] = 0;
-	//Co 0 phan thuong ma chia cho j hoc sinh thi co 1 cach chia
+	//Có 0 phần thưởng mà chia cho j học sinh thì có 1 cách chia
 	for (size_t j = 1; j <= n; j++)
 		c[0][j] = 1;
 	for (size_t i = 1; i <= m; i++)
 	{
 		for (size_t j = 1; j <= n; j++)
 		{
-			//Neu so phan thuong < so hoc sinh thi hoc sinh tu [i+1] den j se khong co phan thuong
-			//So cach chia i phan thuong cho j hoc sinh bang voi so cach chia i phan thuong cho i hoc sinh
+			//Nếu số phần thưởng < số học sinh thì học sinh từ [i+1] đến j sẽ không có phần thưởng
+			//Như vậy, số cách chia i phần thưởng cho j học sinh bằng với số cách chia i phần thưởng cho i học sinh
 			if (i < j)
 				c[i][j] = c[i][i];
-			//Neu so phan thuong > so hoc sinh
+			//Nếu số phần thưởng > số học sinh
 			else
 				/*TH1: người cuối cùng không có phần thưởng, tức là chỉ chia i phần
 				thưởng cho j-1 người, trường hợp này số cách chia là C[ i ][ j-1 ]

@@ -16,11 +16,7 @@ int ChonMenu(int soMenu)
 		system("cls");
 		XuatMenu();
 		cout << "\nNhap 1 so trong khoang tu [0,..," << soMenu << "] de chon chuc nang, stt = ";
-		if (!(cin >> stt))
-		{
-			cin.clear();	// xóa cờ lỗi của cin
-			fflush(stdin);	// xóa toàn bộ bộ nhớ đệm, chuẩn bị cho lần nhập kế tiếp
-		}
+		cin >> stt;
 		if (0 <= stt && stt <= soMenu)
 			break;
 	}

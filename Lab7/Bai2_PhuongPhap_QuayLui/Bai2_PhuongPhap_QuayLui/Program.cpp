@@ -1,10 +1,12 @@
-#include <iostream>
+﻿#include <iostream>
 #include <conio.h>
 
 using namespace std;
 
-int m, n, r;
-int P[100];
+int m;		//m phần thưởng
+int n;		//n học sinh
+int r;		//r cách chia
+int P[100];	//Mảng p kết quả
 
 #include "Header.h"
 
