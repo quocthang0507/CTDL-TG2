@@ -60,13 +60,13 @@ void XuLyMenu(int menu)
 		cout << "\n2. Phuong phap quay lui : Tim va xuat cach chia phan thuong bang phuong phap vet can\n";
 		cout << "\nNhap so phan thuong m = ";
 		cin >> m;
-		cout << "\nNhap so phan thuong n = ";
+		cout << "\nNhap so hoc sinh n = ";
 		cin >> n;
 		::r = 0;
 		P[0] = m;
 		cout << "\nBang chia phan thuong : \n\n";
 		Chia(m, 1);
-		cout << "\nCo tat ca la " << ::r << " cach chia giai thuong";
+		cout << "\nCo tat ca la " << ::r << " cach chia phan thuong";
 		break;
 	case 3:
 		cout << "\n3. Phuong phap tham lam : Bai toan du lich\n";
@@ -89,11 +89,11 @@ void XuLyMenu(int menu)
 		cout << "\n4. Phuong phap quy hoach dong : Tim so cach chia phan thuong\n";
 		cout << "\nNhap so phan thuong m = ";
 		cin >> m;
-		cout << "\nNhap so phan thuong n = ";
+		cout << "\nNhap so hoc sinh n = ";
 		cin >> n;
 		MangKQ c;
 		ChiaPhanThuong(c, m, n);
-		cout << "\nCo tat ca la " << c[m][n] << " cach chia giai thuong";
+		cout << "\nCo tat ca la " << c[m][n] << " cach chia phan thuong";
 		break;
 	default:
 		break;
