@@ -25,7 +25,7 @@ void Xuat_Mang(Mang a, int length)
 void MinMax(Mang a, int l, int r, int &min, int &max)
 {
 	int min1, min2, max1, max2;
-	if (r - l == 1)
+	if (r == l)
 	{
 		min = a[l];
 		max = a[l];
@@ -33,7 +33,7 @@ void MinMax(Mang a, int l, int r, int &min, int &max)
 	else
 	{
 		MinMax(a, l, (l + r) / 2, min1, max1);
-		MinMax(a, (l + r) / 2, r, min2, max2);
+		MinMax(a, (l + r) / 2 + 1, r, min2, max2);
 		if (min1 < min2)
 			min = min1;
 		else min = min2;

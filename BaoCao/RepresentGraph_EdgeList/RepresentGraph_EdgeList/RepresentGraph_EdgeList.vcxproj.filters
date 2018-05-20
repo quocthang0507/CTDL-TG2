@@ -20,8 +20,37 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Header.h">
+    <ClInclude Include="Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TextF.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="TextA.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="TextB.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="TextC.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="TextD.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="TextE.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Output.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
