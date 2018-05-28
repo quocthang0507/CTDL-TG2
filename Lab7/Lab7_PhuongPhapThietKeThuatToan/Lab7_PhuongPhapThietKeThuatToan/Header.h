@@ -69,22 +69,19 @@ void Chia(int m, int n)
 int GTS(Graph g, int tour[MAX], int start)
 {
 	int v, k, w;
-	int min, cost, daXet[MAX];
-	for (size_t k = 0; k < g.numVertices; k++)
-	{
-		daXet[k] = 0;
-	}
+	int min, cost;
+	ResetFlags(g);
 	cost = 0;
 	int i;
 	v = start;
 	i = 1;
 	tour[i] = v;
-	daXet[v] = 1;
+	g.Vertices[v].visited = YES;
 	while (i < g.numVertices)
 	{
 		min = INF;
 		for (size_t k = 0; k < g.numVertices; k++)
-			if (!daXet[k])
+			if (!g.Vertices[k].visited)
 				if (min > g.cost[v][k])
 				{
 					min = g.cost[v][k];
@@ -93,7 +90,7 @@ int GTS(Graph g, int tour[MAX], int start)
 		v = w;
 		i++;
 		tour[i] = v;
-		daXet[v] = 1;
+		g.Vertices[v].visited = YES;
 		cost += min;
 	}
 	cost += g.cost[v][start];
